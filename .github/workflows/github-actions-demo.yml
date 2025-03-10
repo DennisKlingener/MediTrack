@@ -1,4 +1,5 @@
 name: CI/CD Pipeline for MediTrack
+
 on:
     pull_request:
         branches:
@@ -10,9 +11,19 @@ jobs:
         
 
         steps:
-            - name: Testing 
-              run: echo "Hello world"
+            - name: Checkout project code  
+              uses: actions/checkout@v3   # This is a custom github action that pull the latest code.
 
             
-            - name: Pass the job
-              run: exit 0
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                node-version: 20
+
+            - name: Install dependencies
+              run: |
+                npm install
+                cd frontend
+
+            - name: Build the app
+              run: npm run build
