@@ -28,4 +28,7 @@ jobs:
                 
 
             - name: Build the app
-              run: npm run build
+              run: |
+                  pwd
+                  cd frontend
+                  npm run build
