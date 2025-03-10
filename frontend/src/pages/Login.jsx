@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import '../styles/kjh'
+import '../styles/Login.css'
 
 
 // FOR THE LOGIN PAGE WE CAN HAVE ONE ROW WITH ONE COLUMN WITH TWO DIVS IN IT.
