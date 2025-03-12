@@ -66,7 +66,7 @@ jobs:
       
       - name: Start the backend
         run: |
-          ssh -t root@159.203.164.160 "cd /opt/MediTrack/backend && pm2 start server.js --name "MediTrack""
+          ssh -t root@159.203.164.160 "cd /opt/MediTrack/backend && pm2 stop MediTrack && npm install && pm2 start server.js --name MediTrack"
           
 
 
