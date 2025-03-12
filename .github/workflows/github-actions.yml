@@ -45,32 +45,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Connect to droplet
+      - name: Set up SSH
         run: | 
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           sudo chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-          ssh -v root@159.203.164.160
         env: 
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-          SSH_KEY_PATH: ${{ github.workspace }}/../.ssh/id_rsa
+          # SSH_KEY_PATH: ${{ github.workspace }}/../.ssh/id_rsa
 
       - name: Pull latest code
         run: |
+          ssh -v root@159.203.164.160
           cd /opt/MediTrack
           git checkout main
           git pull
+          
       
       - name: Build the frontend
         run: |
+          ssh -v root@159.203.164.160
           cd frontend
           npm install
           npm run build
       
       - name: Start the backend
         run: |
+          ssh -v root@159.203.164.160
           cd ../backend
           pm2 start server.js --name "MediTrack"
 
