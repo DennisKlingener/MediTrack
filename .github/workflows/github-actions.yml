@@ -50,7 +50,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           sudo chmod 600 ~/.ssh/id_rsa
-          echo "$SSH_KNOWN_HOSTS" > ~/.shh/known_hosts
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
           ssh -v root@159.203.164.160
         env: 
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
