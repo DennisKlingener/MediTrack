@@ -38,6 +38,7 @@ function MediTrackIndex() {
 
                 <div className="col-auto">
                     <h1 id="title">Medi-Track</h1>
+                    <h1>A class project</h1>
                 </div>
 
             </div>
