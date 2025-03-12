@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'; // FOR BOOTSTRAP
-import '../styles/index.css' // GLOBAL STYLES
+import '../styles/inasjhdgf // GLOBAL STYLES
 
 
 // PAGES
