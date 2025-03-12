@@ -58,24 +58,16 @@ jobs:
 
       - name: Pull latest code
         run: |
-          ssh -v root@159.203.164.160
-          cd /opt/MediTrack
-          git checkout main
-          git pull
+          ssh -t root@159.203.164.160 "cd /opt/MediTrack && git checkout main && git pull"
           
-      
       - name: Build the frontend
         run: |
-          ssh -v root@159.203.164.160
-          cd frontend
-          npm install
-          npm run build
+          ssh -t root@159.203.164.160 "cd /opt/MediTrack/frontend && npm install && npm run build"
       
       - name: Start the backend
         run: |
-          ssh -v root@159.203.164.160
-          cd ../backend
-          pm2 start server.js --name "MediTrack"
+          ssh -t root@159.203.164.160 "cd /opt/MediTrack/backend && pm2 start server.js --name "MediTrack""
+          
 
 
 
