@@ -11,6 +11,7 @@ on:
 jobs:
   build:
       runs-on: ubuntu-latest
+      if: github.ref != 'refs/heads/main'
       steps:
         - name: Checkout project code  
           uses: actions/checkout@v3   # This is a custom github action that pull the latest code.
