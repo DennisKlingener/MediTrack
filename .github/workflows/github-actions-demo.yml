@@ -1,18 +1,76 @@
 name: CI/CD Pipeline for MediTrack
+
 on:
     pull_request:
-        branches:
-            - main
+      branches:
+        - main
+    push:
+      branches-ignore:
+        - main
+
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout project code  
+          uses: actions/checkout@v3   # This is a custom github action that pull the latest code.
+
         
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: 20
 
-        steps:
-            - name: Testing 
-              run: echo "Hello world"
-
+        - name: Install dependencies
+          run: |
+            pwd
+            cd frontend
+            npm install
             
-            - name: Pass the job
-              run: exit 0
+
+        - name: Build the app
+          run: |
+            pwd
+            cd frontend
+            npm run build
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Only runs when pushing to main (merge to main)
+    steps:
+
+      - name: Checkout project code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Connect to droplet
+        run: | 
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 159.203.164.160 >> ~/.ssh/known_hosts
+        env: 
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Pull latest code
+        run: |
+          cd /opt/MediTrack
+          git checkout main
+          git pull
+      
+      - name: Build the frontend
+        run: |
+          cd frontend
+          npm install
+          npm run build
+      
+      - name: Start the backend
+        run: |
+          cd ../backend
+          pm2 start server.js --name "MediTrack"
+
+
+
+
