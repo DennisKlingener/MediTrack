@@ -61,16 +61,15 @@ jobs:
         env: 
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-          SSH_USER_AND_IP: ${{ secrets.SSH_USER_AND_IP }}
           
       - name: Pull latest code
         run: |
-          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack && git checkout main && git pull"
+          ssh -t ${{ secrets.SSH_USER_AND_IP }} "cd /opt/MediTrack && git checkout main && git pull"
           
       - name: Build the frontend
         run: |
-          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack/frontend && npm install && npm run build"
+          ssh -t ${{ secrets.SSH_USER_AND_IP }} "cd /opt/MediTrack/frontend && npm install && npm run build"
       
       - name: Start the backend
         run: |
-          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack/backend && pm2 stop MediTrack && npm install && pm2 start server.js --name MediTrack"
+          ssh -t ${{ secrets.SSH_USER_AND_IP }} "cd /opt/MediTrack/backend && pm2 stop MediTrack && npm install && pm2 start server.js --name MediTrack"
