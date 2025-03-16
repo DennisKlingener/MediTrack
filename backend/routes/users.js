@@ -45,6 +45,15 @@ router.get("/search", (req, res) => {
     // Get the passed in parameters to search by.
     const {id, firstName, lastName, userName, password, phoneNumber, email} = req.query;
 
+    // Ensure the parameters passed in are valid.
+    const validSearchParams = ["id", "firstName", "lastName", "userName", "password", "phoneNumber", "email"];
+
+    for (let passedInParam in req.query) {
+        if (!validSearchParams.includes(passedInParam)) {
+            return res.status(400).json({error: `Invalid query parameter: ${passedInParam}`});
+        }
+    }
+
     // Create the base query.
     let request = "SELECT * FROM users WHERE 1=1";
     let queryValues = [];
