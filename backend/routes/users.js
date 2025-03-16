@@ -7,35 +7,7 @@ router.use(express.json());
 
 // Port that the server is running on.
 // Do the backend and frontend need to be on different ports?
-const PORT = process.env.PORT || 5000;
-
-// Get all users
-router.get("/", (req, res) => {
-
-    // Get a database connection from the connection pool.
-    databasePool.getConnection((err, connection) => {
-
-        if (err) {
-            return res.status(500).json({error: "Database connection failure:" + err.message});
-        }
-
-        connection.query("SELECT * FROM users", (err, results) => {
-
-            // Release the connection
-            connection.release();
-
-            // If there is an error set the status to 500 and return
-            // the JSON of the error.
-            if (err) {
-                return res.status(500).json({error: err.message});
-            }
-
-            // If no error, return the results JSON.
-            res.json(results);
-
-        });
-    });
-});
+const PORT = process.env.PORT || 5000; // Do we need this...
 
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
@@ -50,7 +22,7 @@ router.get("/search", (req, res) => {
 
     for (let passedInParam in req.query) {
         if (!validSearchParams.includes(passedInParam)) {
-            return res.status(400).json({error: `Invalid query parameter: ${passedInParam}`});
+            return res.status(500).json({error: `Invalid query parameter: ${passedInParam}`});
         }
     }
 
@@ -117,68 +89,53 @@ router.get("/search", (req, res) => {
 });
 
 
-
-
-
-
-
-
-
-
 // Add user
+router.post("/add", (req, res) => {
+
+    console.log("Here is request:" + req.body);
+
+    // Get a connection 
+    databasePool.getConnection((err, connection) => {
+        
+        if (err) {
+            return res.status(500).json({error: "Database connection failure:" + err.message});
+        }
+
+        // Get the json from the request.
+        const {firstName, lastName, userName, password, phoneNumber, email} = req.body;
+
+        // Init the values array and field names to ensure all required fields are present.
+        let values = [firstName, lastName, userName, password, phoneNumber, email];
+        let requiredFields = ["firstName", "lastName", "userName", "password", "phoneNumber", "email"];
+
+        // Ensure all data is present for new user and add values to the values array.
+        for (let i = 0; i < values.length; i++) {
+            if (!values[i]) {
+                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
+            }
+        }
+
+        // Contruct the sql insert statement.
+        let request = "INSERT INTO users (FIRST_NAME, LAST_NAME, USER_NAME, PASSWORD, PHONE_NUMBER, EMAIL) VALUES (?,?,?,?,?,?)";
+
+        // Execute the statement.
+        connection.query(request, values, (err, results) => {
+
+            connection.release();
+
+            if (err) {
+                return res.status(500).json({error: err.message});
+            }
+
+            res.json(results);
+        });
+    });
+});
 
 
 // Remove user
 
-
-
-
 // Edit user
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports = router;
