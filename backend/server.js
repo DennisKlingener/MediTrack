@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const userRouter = require("./routes/users");
+const medicationRouter = require("./routes/medications");
 
 const app = express();
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(express.json());
 // so if the catch all is first, it will catch all the requests and return index.html
 // for all of them, and our API routes will never be used.
 app.use("/routes/users", userRouter);
+app.use("/routes/medications", medicationRouter);
 
 // Serve the frontend static files
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
