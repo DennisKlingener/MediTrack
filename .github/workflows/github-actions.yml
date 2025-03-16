@@ -16,24 +16,30 @@ jobs:
         - name: Checkout project code  
           uses: actions/checkout@v3   # This is a custom github action that pull the latest code.
 
-        
         - name: Set up Node.js
           uses: actions/setup-node@v3
           with:
             node-version: 20
 
-        - name: Install dependencies
+        - name: Install frontend dependencies
           run: |
-            pwd
             cd frontend
             npm install
             
-
-        - name: Build the app
+        - name: Build the frontend
           run: |
-            pwd
             cd frontend
             npm run build
+
+        - name: Install backend dependencies
+          run: |
+            cd backend
+            npm install
+        
+        - name: Start the backend
+          run: |
+            cd backend
+            pm2 start server.js --name MediTrack
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,21 +60,16 @@ jobs:
         env: 
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-          # SSH_KEY_PATH: ${{ github.workspace }}/../.ssh/id_rsa
-
+          SSH_USER_AND_IP: ${{ secrets.SSH_USER_AND_IP }}
+          
       - name: Pull latest code
         run: |
-          ssh -t root@159.203.164.160 "cd /opt/MediTrack && git checkout main && git pull"
+          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack && git checkout main && git pull"
           
       - name: Build the frontend
         run: |
-          ssh -t root@159.203.164.160 "cd /opt/MediTrack/frontend && npm install && npm run build"
+          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack/frontend && npm install && npm run build"
       
       - name: Start the backend
         run: |
-          ssh -t root@159.203.164.160 "cd /opt/MediTrack/backend && pm2 stop MediTrack && npm install && pm2 start server.js --name MediTrack"
-          
-
-
-
-
+          ssh -t $SSH_USER_AND_IP "cd /opt/MediTrack/backend && pm2 stop MediTrack && npm install && pm2 start server.js --name MediTrack"
