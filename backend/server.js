@@ -1,15 +1,24 @@
 const express = require("express");
 const path = require("path");
+const userRoutes = require("./routes/users");
 
 const app = express();
+app.use(express.json());
 
 // Serve the frontend static files
-app.use(express.static(path.join(__dirname, "../frontend/dist"))); // If using Vite
-// app.use(express.static(path.join(__dirname, "../frontend/build"))); // If using Create React App
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+// API routes
+// Note: API rputes must be defined before the catch all "*" for index.html.
+// This is because express checks the routes in the order of which they are defined,
+// so if the catch all is first, it will catch all the requests and return index.html
+// for all of them, and our API routes will never be used.
+app.use("/routes/users", userRoutes);
+
 
 // Catch-all route to serve `index.html` for React SPA (Single Page Application)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist/index.html")); // Adjust if using Create React App
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
 });
 
 // Start the Express server
