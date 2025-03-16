@@ -5,9 +5,6 @@ const userRouter = require("./routes/users");
 const app = express();
 app.use(express.json());
 
-// Serve the frontend static files
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
 // API routes
 // Note: API rputes must be defined before the catch all "*" for index.html.
 // This is because express checks the routes in the order of which they are defined,
@@ -15,6 +12,8 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 // for all of them, and our API routes will never be used.
 app.use("/routes/users", userRouter);
 
+// Serve the frontend static files
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
 // Catch-all route to serve `index.html` for React SPA (Single Page Application)
 app.get("*", (req, res) => {
