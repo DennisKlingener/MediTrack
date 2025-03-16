@@ -1,4 +1,4 @@
-const express = package.require("express");
+const express = require("express");
 const database = require("./database");
 const app = express();
 
