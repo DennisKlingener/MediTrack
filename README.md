@@ -1,0 +1,2 @@
+# Command to insert new user
+- curl -H "Content-Type: application/json" -d '{"firstName":"API", "lastName":"TEST", "userName":"APITEST", "password":"TEST123", "phoneNumber":"555-555-5555", "email":"test@email.com"}' http://159.203.164.160:5000/routes/users/add

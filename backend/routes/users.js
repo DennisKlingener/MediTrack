@@ -92,8 +92,6 @@ router.get("/search", (req, res) => {
 // Add user
 router.post("/add", (req, res) => {
 
-    console.log("Here is request:" + req.body);
-
     // Get a connection 
     databasePool.getConnection((err, connection) => {
         
@@ -133,7 +131,38 @@ router.post("/add", (req, res) => {
 });
 
 
-// Remove user
+// Remove user associated with the passed in id.
+router.delete("/delete/:id", (req, res) => {
+
+    databasePool.getConnection((err, connection) => {
+
+        if (err) {
+            return res.status(500).json({error: "Database connection failure:" + err.message});
+        }
+
+        // Prepare the statement.
+        let userID = req.params.id;
+        let request = "DELETE FROM users WHERE id = ?";
+
+        // Execute the statement.
+        connection.query(request, [userID], (err, results) => {
+
+            connection.release();
+
+            if (err) {
+                return res.status(500).json({error: err.message});
+            }
+
+            res.json(results);
+
+        });
+    });
+});
+
+
+
+
+
 
 // Edit user
 
