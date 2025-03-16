@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const userRoutes = require("./routes/users");
+const userRouter = require("./routes/users");
 
 const app = express();
 app.use(express.json());
@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, "../frontend/dist")));
 // This is because express checks the routes in the order of which they are defined,
 // so if the catch all is first, it will catch all the requests and return index.html
 // for all of them, and our API routes will never be used.
-app.use("/routes/users", userRoutes);
+app.use("/routes/users", userRouter);
 
 
 // Catch-all route to serve `index.html` for React SPA (Single Page Application)
