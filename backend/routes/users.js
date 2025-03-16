@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
-const { Connection } = require("mysql2/typings/mysql/lib/Connection");
 
 // Express function that parses incoming JSON
 router.use(express.json());
