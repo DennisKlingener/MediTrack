@@ -1,5 +1,5 @@
 const express = require("express");
-const database = require("./database");
+const database = require("../databaseConnection");
 const app = express();
 
 // Express function that parses incoming JSON
@@ -21,6 +21,5 @@ app.get("/routes/users", (req, res) => {
         res.json(results);
     });
 });
-
 
 module.exports = userRoutes;
