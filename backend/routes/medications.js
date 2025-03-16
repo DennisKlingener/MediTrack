@@ -9,13 +9,14 @@ router.use(express.json());
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
 
+// Search 
 router.get("/search", (req, res) => {
 
     // Get the parameters to search by.
-    const {id, medName, currentQuantity, amountToTake, refillQuantity, dateStarted, timeUntilRefill, takeInterval, userId} = req.query;
+    const {id, medName, currentQuantity, amountToTake, refillQuantity, dateStarted, daysUntilRefill, takeInterval, timeToTakeAt, isTimeAM, userId} = req.query;
 
     // Ensure the parameters passed in are valid.
-    const validSearchParams = ["id", "medName", "currentQuantity", "amountToTake", "refillQuantity", "dateStarted", "timeUntilRefill", "takeInterval", "userId"];
+    const validSearchParams = ["id", "medName", "currentQuantity", "amountToTake", "refillQuantity", "dateStarted", "daysUntilRefill", "takeInterval", "timeToTakeAt", "isTimeAM", "userId"];
 
     for (let passedInParam in req.query) {
         if (!validSearchParams.includes(passedInParam)) {
@@ -58,14 +59,24 @@ router.get("/search", (req, res) => {
         queryValues.push(dateStarted);
     }
 
-    if (timeUntilRefill) {
+    if (daysUntilRefill) {
         request += " AND TIME_UNTIL_REFILL= ?";
-        queryValues.push(timeUntilRefill);
+        queryValues.push(daysUntilRefill);
     }
 
     if (takeInterval) {
         request += " AND TAKE_INTERVAL = ?";
         queryValues.push(takeInterval);
+    }
+
+    if (timeToTakeAt) {
+        request += " AND TIME_TO_TAKE_AT = ?";
+        queryValues.push(timeToTakeAt);
+    }
+
+    if (isTimeAM) {
+        request += " AND IS_TIME_AM = ?";
+        queryValues.push(isTimeAM);
     }
 
     if (userId) {
@@ -92,7 +103,51 @@ router.get("/search", (req, res) => {
     });
 });
 
+// Add
+router.post("/add", (req, res) => {
+
+    // Get a connection
+    databasePool.getConnection((err,connection) => {
+
+        if (err) {
+            return res.status(500).json({error: "Database connection failure:" + err.message});
+        }
+        
+        // Get the JSON package from the request.
+        const {medName, currentQuantity, amountToTake, refillQuantity, dateStarted, daysUntilRefill, takeInterval, timeToTakeAt, isTimeAM, userId} = req.body;
+    
+        // Init the values array and make sure all the needed values are present.
+        let values = [medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId];
+        let requiredFields = ["medName", "currentQuantity", "amountToTake", "refillQuantity", "dateStarted", "takeInterval", "timeToTakeAt", "isTimeAM", "userId"];
+
+        // Ensure all data is present for new user and add values to the values array.
+        for (let i = 0; i < values.length; i++) {
+            if (!values[i]) {
+                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
+            }
+        }
+
+        let request = "INSERT INTO medications (MED_NAME, CURRENT_QUANTITY, AMOUNT_TO_TAKE, REFILL_QUANTITY, DATE_STARTED, TAKE_INTERVAL, TIME_TO_TAKE_AT, IS_TIME_AM, USER_ID) VALUES(?,?,?,?,?,?,?,?,?)";
+
+        connection.query(request, values, (err, results) => {
+
+            connection.release();
+
+            if (err) {
+                return res.status(500).json({error: err.message});
+            }
+
+            res.json(results);
+
+        });
+    });
 
 
+
+});
+
+// Delete
+
+// Update
 
 module.exports = router;
