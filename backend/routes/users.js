@@ -1,16 +1,16 @@
 const express = require("express");
+const router = express.Router();
 const database = require("../databaseConnection");
-const app = express();
 
 // Express function that parses incoming JSON
-app.use(express.json());
+router.use(express.json());
 
 // Port that the server is running on.
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000;
 
 // Get all users
-app.get("/routes/users", (req, res) => {
+router.get("/routes/users", (req, res) => {
     database.query("SELECT * FROM users", (err, results) => {
         // If there is an error set the status to 500 and return
         // the JSON of the error.
@@ -22,4 +22,4 @@ app.get("/routes/users", (req, res) => {
     });
 });
 
-module.exports = userRoutes;
+module.exports = router;
