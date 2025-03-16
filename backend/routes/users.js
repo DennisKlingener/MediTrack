@@ -10,7 +10,7 @@ router.use(express.json());
 const PORT = process.env.PORT || 5000;
 
 // Get all users
-router.get("/routes/users", (req, res) => {
+router.get("/", (req, res) => {
     database.query("SELECT * FROM users", (err, results) => {
         // If there is an error set the status to 500 and return
         // the JSON of the error.
