@@ -88,7 +88,6 @@ router.get("/search", (req, res) => {
     });
 });
 
-
 // Add user
 router.post("/add", (req, res) => {
 
@@ -130,7 +129,6 @@ router.post("/add", (req, res) => {
     });
 });
 
-
 // Remove user associated with the passed in id.
 router.delete("/delete/:id", (req, res) => {
 
@@ -153,18 +151,18 @@ router.delete("/delete/:id", (req, res) => {
                 return res.status(500).json({error: err.message});
             }
 
-            res.json(results);
-
+            if (results.affectedRows === 0) {
+                return res.status(404).json({error: `User with ${userID} not found`});
+            }
+            
+            res.json({
+                message: `User with ID ${userID} deleted successfully`,
+                deletedRows: results.affectedRows
+            });
         });
     });
 });
 
-
-
-
-
-
-// Edit user
-
+// Edit user... not 100% needed...
 
 module.exports = router;
