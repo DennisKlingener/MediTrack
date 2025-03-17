@@ -46,7 +46,7 @@ cron.schedule("0 * * * *", async () => {
 
     // Query for all table entries whos time to take matches the current hour.
     const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
-    let values = [`${currentHour}:00:00`, (isAM) ? 1 : 0];
+    let values = [(currentHour > 9) ? `${currentHour}:00:00` : `0${currentHour}:00:00`, (isAM) ? 1 : 0];
 
     // async query.
     const results = await asyncDatabaseQuery(selectRequest, values);
