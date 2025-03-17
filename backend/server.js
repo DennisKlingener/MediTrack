@@ -6,6 +6,9 @@ const medicationRouter = require("./routes/medications");
 const app = express();
 app.use(express.json());
 
+// Import the cron jobs for the server.
+require("./cronJobs");
+
 // API routes
 // Note: API rputes must be defined before the catch all "*" for index.html.
 // This is because express checks the routes in the order of which they are defined,

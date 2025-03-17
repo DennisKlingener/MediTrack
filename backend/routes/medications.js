@@ -177,6 +177,7 @@ router.delete("/delete/:userId/:medName", (req,res) => {
 });
 
 // Update
-// Need to know the logic we want to implement before writing this. specifically how we will be updating the medications on a time interval.
+// Need this if we want users to be able to edit med info after entering it.
+
 
 module.exports = router;
