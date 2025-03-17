@@ -141,13 +141,42 @@ router.post("/add", (req, res) => {
 
         });
     });
-
-
-
 });
 
 // Delete
+router.post("/delete/:userId/:medName", (req,res) => {
+
+    databasePool.getConnection((err, connection) => {
+
+        if (err) {
+            return res.status(500).json({error: "Database connection failure:" + err.message});
+        }
+
+        let userId = req.params.userId;
+        let medName = req.params.medName;
+        let request = "DELETE FROM medications WHERE USER_ID = ? AND MED_NAME = ?";
+
+        connection.query(request, [userId, medName], (err, results) => {
+
+            connection.release();
+
+            if (err) {
+                return res.status(500).json({error: err.message});
+            }
+
+            if (results.affectedRows === 0) {
+                return res.status(404).json({error: `Medication with USER_ID:${userId} and MED_NAME:${medName} not found`});
+            }
+
+            res.json({
+                message: `Medication with USER_ID:${userId} and MED_NAME:${medName} deleted successfully`,
+                deletedRows: results.affectedRows
+            });
+        }); 
+    });
+});
 
 // Update
+// Need to know the logic we want to implement before writing this. specifically how we will be updating the medications on a time interval.
 
 module.exports = router;

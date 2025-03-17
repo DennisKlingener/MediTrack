@@ -1,2 +1,5 @@
 # Command to insert new user
 - curl -H "Content-Type: application/json" -d '{"firstName":"API", "lastName":"TEST", "userName":"APITEST", "password":"TEST123", "phoneNumber":"555-555-5555", "email":"test@email.com"}' http://159.203.164.160:5000/routes/users/add
+
+# Command to insert new medication
+curl -H "Content-Type: application/json" -d '{"medName":"DRUG", "currentQuantity":"30", "amountToTake":"1", "refillQuantity":"30", "dateStarted":"2025-03-16", "takeInterval":"24", "timeToTakeAt":"09:00:00", "isTimeAM":"true", "userId":"1"}' http://159.203.164.160:5000/routes/medications/add
