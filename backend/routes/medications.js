@@ -144,7 +144,7 @@ router.post("/add", (req, res) => {
 });
 
 // Delete
-router.post("/delete/:userId/:medName", (req,res) => {
+router.delete("/delete/:userId/:medName", (req,res) => {
 
     databasePool.getConnection((err, connection) => {
 
