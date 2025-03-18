@@ -24,9 +24,12 @@ async function asyncDatabaseQuery(request, values) {
 }
 
 // Checks all entries that have a TIME_TO_TAKE_VALUE.
-cron.schedule("0 * * * *", async () => {
+cron.schedule("* * * * *", async () => {
 
     // Get all the entires whos time to take is equal to the current time.
+
+    console.log("entering cron job!");
+
 
     // Get the current time.
     const currentTime = new Date();
@@ -64,6 +67,12 @@ cron.schedule("0 * * * *", async () => {
         let userId = row.USER_ID;
         let medName = row.MED_NAME;
 
+
+        console.log("Here was current quantity: ", currentQuantity);
+        console.log("Here is user id: ", userId);
+        console.log("Here is medName: ", medName);
+
+        
         // Clear and set values
         values.length = 0;
         values.push(currentQuantity, userId, medName);
