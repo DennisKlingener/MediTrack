@@ -36,6 +36,9 @@ cron.schedule("* * * * *", async () => {
     let currentHour = currentTime.getHours();
     let isAM = false;
 
+    console.log("Here is current time:", currentTime);
+    console.log("here is current hour:", currentHour);
+
     // Check if AM or PM and mod if needed.
     if (currentHour <= 11) {
         isAM = true;
@@ -47,12 +50,17 @@ cron.schedule("* * * * *", async () => {
         currentHour = (currentHour % 12);
     }
 
+    console.log("here is current hour after mod:", currentHour);
+
     // Query for all table entries whos time to take matches the current hour.
     const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
     let values = [(currentHour > 9) ? `${currentHour}:00:00` : `0${currentHour}:00:00`, (isAM) ? 1 : 0];
 
+    console.log("here is values:", values);
+
     // async query.
     const results = await asyncDatabaseQuery(selectRequest, values);
+
     
     // AT THIS POINT WE WOULD NEED TO IMPLEMENT A METHOD THAT GETS THE PHONE NUMBER OF THE USERS IN THE RETURNED RESUSLTS AND SEND THEM A TEXT MESSAGE!!!!
 
@@ -72,7 +80,7 @@ cron.schedule("* * * * *", async () => {
         console.log("Here is user id: ", userId);
         console.log("Here is medName: ", medName);
 
-        
+
         // Clear and set values
         values.length = 0;
         values.push(currentQuantity, userId, medName);
