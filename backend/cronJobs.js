@@ -61,7 +61,6 @@ cron.schedule("* * * * *", async () => {
     // async query.
     const results = await asyncDatabaseQuery(selectRequest, values);
 
-    
     // AT THIS POINT WE WOULD NEED TO IMPLEMENT A METHOD THAT GETS THE PHONE NUMBER OF THE USERS IN THE RETURNED RESUSLTS AND SEND THEM A TEXT MESSAGE!!!!
 
     // Make allthe neccesary updates to the returned results.
@@ -75,11 +74,10 @@ cron.schedule("* * * * *", async () => {
         let userId = row.USER_ID;
         let medName = row.MED_NAME;
 
-
+        console.log("here is row: ", row);
         console.log("Here was current quantity: ", currentQuantity);
         console.log("Here is user id: ", userId);
         console.log("Here is medName: ", medName);
-
 
         // Clear and set values
         values.length = 0;
