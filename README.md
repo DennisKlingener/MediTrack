@@ -8,3 +8,4 @@
 - Need to implement jwt tokens
 - Make usernames in the database a unique entry
 - put asyncdatabasequery in utils so we can use it in medications and cronJobs without rewriting.
+- finish login endpoint
