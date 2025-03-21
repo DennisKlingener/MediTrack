@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000; // Do we need this...
 
 
 
-// PUT THIS IN UTILS THIS IS REWRITTEN CODE BAD BAD BAD
+// PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
 async function asyncDatabaseQuery(request, values) {
     try {
         const results = await new Promise((resolve, reject) => {
@@ -120,6 +120,10 @@ router.get("/search", (req, res) => {
     });
 });
 
+
+
+
+
 // Should probably make a login endpoint so we can use jwt tokens.
 router.post("/login", async (req, res) => {
     databasePool.getConnection((err, connection) => {
@@ -142,14 +146,16 @@ router.post("/login", async (req, res) => {
             }
         }
 
-        // Set the request.
+        // Make an async query.
         const request = "SELECT * FROM users WHERE USER_NAME = ?";
+        results = asyncDatabaseQuery(request, values);
+        
+        // Check that the password passed to this endpoint matches the password found from the query.
+        if (values[1] == results.PASSWORD) {
+            // Need to init a jwt token with the users information and return a success statment back the frontend here. 
+        }
 
-
-
-
-
-
+        // Here the password was incorrect, send back a failure.
     });
 });
 
