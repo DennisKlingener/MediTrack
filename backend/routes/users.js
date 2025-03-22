@@ -123,45 +123,40 @@ router.get("/search", (req, res) => {
 
 // Should probably make a login endpoint so we can use jwt tokens.
 router.post("/login", async (req, res) => {
-    databasePool.getConnection((err, connection) => {
-        
-        if (err) {
-            return res.status(500).json({error: "Database connection failure:" + err.message});
+    
+    // Get the json from the login request.
+    const {userName, password} = req.body;
+
+    // Init the values array and field names to ensure all required fields are present.
+    let values = [userName, password];
+    let requiredFields = ["userName", "password"];
+
+    // Ensure all data is present for user login and add values to the values array.
+    for (let i = 0; i < values.length; i++) {
+        if (!values[i]) {
+            return res.status(500).json({error: `Login data ${requiredFields[i]} is missing`});
         }
+    }
 
-        // Get the json from the login request.
-        const {userName, password} = req.body;
+    // Make an async query.
+    const request = "SELECT * FROM users WHERE USER_NAME = ?";
+    results = await asyncDatabaseQuery(request, values);
+    
 
-        // Init the values array and field names to ensure all required fields are present.
-        let values = [userName, password];
-        let requiredFields = ["userName", "password"];
-
-        // Ensure all data is present for user login and add values to the values array.
-        for (let i = 0; i < values.length; i++) {
-            if (!values[i]) {
-                return res.status(500).json({error: `Login data ${requiredFields[i]} is missing`});
-            }
-        }
-
-        // Make an async query.
-        const request = "SELECT * FROM users WHERE USER_NAME = ?";
-        results = asyncDatabaseQuery(request, values);
-        
-
-        console.log(results);
+    console.log(results);
 
 
-        // Check that the password passed to this endpoint matches the password found from the query.
-        if (values[1] == results.PASSWORD) {
-            // Need to init a jwt token with the users information and return a success statment back the frontend here. 
-            console.log("passwords match!");
-        }
+    // Check that the password passed to this endpoint matches the password found from the query.
+    if (values[1] == results.PASSWORD) {
+        // Need to init a jwt token with the users information and return a success statment back the frontend here. 
+        console.log("passwords match!");
+    }
 
 
-        console.log("passwords dont match!");
+    console.log("passwords dont match!");
 
-        // Here the password was incorrect, send back a failure.
-    });
+    // Here the password was incorrect, send back a failure.
+   
 });
 
 
