@@ -9,6 +9,11 @@ import '../styles/Login.css'
 // WILL DETERMINE WHICH FORM IS LOADED. THE OTHER WILL BE INVISIABLE.
 
 
+// INSTEAD OF USING CONDITIONAL RENDERING JUST MAKE A SIGNIN AND LOGIN PAGE IF WE HAVE TIME!!
+
+
+
+
 function Login() {
 
     // Used to get data from previous page
@@ -18,7 +23,6 @@ function Login() {
     const [signUpForm, setSignUpForm] = useState(false);
     const [signInForm, setSignInForm] = useState(false);
   
-
     useEffect(() => {
 
         // Get the form selected from the previous page  (MediTrackIndex.jsx)
@@ -33,8 +37,46 @@ function Login() {
 
     }, []);
 
+    
 
 
+    // LOGIN
+
+    const [signInFormData, setSignInFormData] = useState ({
+        userName: "",
+        password: "",
+    });
+
+    const handleLogin = async () => {
+
+        // Get the entered information
+        const data = {
+            userName: signInFormData.userName, 
+            password: signInFormData.password
+        };
+
+        console.log(data);
+
+        try {
+
+            // MAKE THIS A GITLAB SECRET!
+            const apiURL = "http://159.203.164.160:5000/users/login";
+
+            const response = await fetch(apiURL, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            console.log(result)
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
 
@@ -54,24 +96,38 @@ function Login() {
                     }
 
                     {signInForm && 
-                        <div id='signInForm'>
+                        <div id="signInForm">
 
-                            <h1>Sign In</h1>
-                            <h2>Put form here</h2>
+                            <div id="signInFormTitle">Sign-In</div>
 
-                        </div> 
+                            <div className="form-group mt-2 mb-2">
+                                <label for="userNameLoginLabel">Username</label>
+                                <input 
+                                    id="userNameInputLogin"
+                                    className='form-control'
+                                    name="userName"
+                                    type="text" 
+                                    value={signInFormData.userName}
+                                    onChange={(e) => {
+                                        setSignInFormData({
+                                            ...signInFormData,
+                                            [e.target.name]: e.target.value
+                                        });
+                                    }}
+                                    placeholder="Username"/>
+                            </div>
+                            
+                            <div className="form-group mt-2 mb-2">
+                                <label for="passwordLoginLabel">Password</label>
+                                <input type="text" className='form-control' id="passwordInputLogin" placeholder="Password"/>
+                            </div>
+
+                            <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
+                        </div>
                     }
 
-
                 </div>
-
             </div>
-
-
-
-
-
-
         </div>
     );
 };
