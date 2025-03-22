@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
-const {convertUTCToTimeZone, convertTimeToUTC} = require("./utils");
+const {convertUTCToTimeZone, convertTimeToUTC} = require("../utils");
 
 // Express function that parses incoming JSON
 router.use(express.json());
