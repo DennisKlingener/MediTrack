@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/Login.css'
 
 
@@ -15,6 +15,9 @@ import '../styles/Login.css'
 
 
 function Login() {
+
+    // Page navigator
+    const navigate = useNavigate();
 
     // Used to get data from previous page
     const location = useLocation();
@@ -36,8 +39,6 @@ function Login() {
         }
 
     }, []);
-
-    
 
 
     // LOGIN
@@ -76,6 +77,16 @@ function Login() {
         } catch (error) {
             console.log(error);
         }
+
+        // Check if the login was successful.
+        if (result.loginComplete) {
+            navigate("/ProfilePage");
+        } else {
+            // put an error message here.
+            console.log("WIP");
+        }   
+        
+
     };
 
     return (
