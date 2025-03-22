@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const userRouter = require("./routes/users");
 const medicationRouter = require("./routes/medications");
+const utils = require("./utils");
 
 const app = express();
 app.use(express.json());
