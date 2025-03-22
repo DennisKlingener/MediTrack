@@ -147,7 +147,7 @@ router.post("/login", async (req, res) => {
 
 
     // Check that the password passed to this endpoint matches the password found from the query.
-    if (values[1] == results.PASSWORD) {
+    if (values[1] == results[0].PASSWORD) {
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
     }
