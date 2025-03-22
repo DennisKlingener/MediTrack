@@ -119,7 +119,19 @@ function Login() {
                             
                             <div className="form-group mt-2 mb-2">
                                 <label for="passwordLoginLabel">Password</label>
-                                <input type="text" className='form-control' id="passwordInputLogin" placeholder="Password"/>
+                                <input 
+                                    id="passwordInputLogin"
+                                    className='form-control'  
+                                    name="password"
+                                    type="text" 
+                                    value={signInFormData.password}
+                                    onChange={(e) => {
+                                        setSignInFormData({
+                                            ...signInFormData,
+                                            [e.target.name]:e.target.value
+                                        });
+                                    }}
+                                    placeholder="Password"/>
                             </div>
 
                             <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
