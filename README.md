@@ -9,3 +9,4 @@
 - Make usernames in the database a unique entry
 - put asyncdatabasequery in utils so we can use it in medications and cronJobs without rewriting.
 - finish login endpoint
+- make login and signup seperate files if we have time!

@@ -139,7 +139,7 @@ router.post("/login", async (req, res) => {
         // Ensure all data is present for user login and add values to the values array.
         for (let i = 0; i < values.length; i++) {
             if (!values[i]) {
-                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
+                return res.status(500).json({error: `Login data ${requiredFields[i]} is missing`});
             }
         }
 
