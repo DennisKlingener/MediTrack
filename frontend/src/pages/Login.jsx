@@ -74,19 +74,17 @@ function Login() {
             const result = await response.json();
             console.log(result)
 
+            // Check if the login was successful.
+            if (result.loginComplete) {
+                navigate("/ProfilePage");
+            } else {
+                // put an error message here.
+                console.log("WIP");
+            }   
+
         } catch (error) {
             console.log(error);
         }
-
-        // Check if the login was successful.
-        if (result.loginComplete) {
-            navigate("/ProfilePage");
-        } else {
-            // put an error message here.
-            console.log("WIP");
-        }   
-        
-
     };
 
     return (
