@@ -150,13 +150,20 @@ router.post("/login", async (req, res) => {
     if (values[1] == results[0].PASSWORD) {
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
-    }
 
+        return res.status(200).json({
+            "loginComplete": true
+        });
+
+    }
 
     console.log("passwords dont match!");
 
+    return res.status(200).json({
+        "loginComplete": false
+    });
+
     // Here the password was incorrect, send back a failure.
-   
 });
 
 
