@@ -160,7 +160,8 @@ router.post("/login", async (req, res) => {
     console.log("passwords dont match!");
 
     return res.status(200).json({
-        "loginComplete": false
+        "loginComplete": false,
+        "message": "INCORRECT_PASSWORD"
     });
 
     // Here the password was incorrect, send back a failure.
