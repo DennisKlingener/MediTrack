@@ -121,9 +121,6 @@ router.get("/search", (req, res) => {
 });
 
 
-
-
-
 // Should probably make a login endpoint so we can use jwt tokens.
 router.post("/login", async (req, res) => {
     databasePool.getConnection((err, connection) => {
