@@ -3,3 +3,9 @@
 
 # Command to insert new medication
 - curl -H "Content-Type: application/json" -d '{"medName":"DRUG", "currentQuantity":"30", "amountToTake":"1", "refillQuantity":"30", "dateStarted":"2025-03-16", "takeInterval":"24", "timeToTakeAt":"09:00:00", "isTimeAM":"1", "userId":"1"}' http://159.203.164.160:5000/routes/medications/add
+
+# Issues
+- Need to implement jwt tokens
+- Make usernames in the database a unique entry
+- put asyncdatabasequery in utils so we can use it in medications and cronJobs without rewriting.
+- finish login endpoint

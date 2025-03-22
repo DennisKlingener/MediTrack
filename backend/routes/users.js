@@ -9,16 +9,43 @@ router.use(express.json());
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
 
+
+
+
+// PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
+async function asyncDatabaseQuery(request, values) {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            databasePool.getConnection((err, connection) => {
+                if (err) reject(err);
+                connection.query(request, values, (err, results) => {
+                    connection.release();
+                    if (err) reject(err);
+                    resolve(results);
+                });
+            });
+        });
+
+        return results;
+    } catch (err) {
+        console.log("Error in asyncDatabaseQuery: ", err);
+    }
+}
+
+
+
+
+
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
 // SELECT * FROM users WHERE <parameters>;
 router.get("/search", (req, res) => {
 
     // Get the passed in parameters to search by.
-    const {id, firstName, lastName, userName, password, phoneNumber, email} = req.query;
+    const {id, firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.query;
 
     // Ensure the parameters passed in are valid.
-    const validSearchParams = ["id", "firstName", "lastName", "userName", "password", "phoneNumber", "email"];
+    const validSearchParams = ["id", "firstName", "lastName", "userName", "password", "phoneNumber", "email", "timeZone"];
 
     for (let passedInParam in req.query) {
         if (!validSearchParams.includes(passedInParam)) {
@@ -67,6 +94,11 @@ router.get("/search", (req, res) => {
         queryValues.push(email);
     }
 
+    if (timeZone) {
+        request += " AND TIMEZONE = ?";
+        queryValues.push(timeZone);
+    }
+
     // Get a connection from the pool and make the request.
     databasePool.getConnection((err, connection) => {
 
@@ -88,6 +120,45 @@ router.get("/search", (req, res) => {
     });
 });
 
+
+// Should probably make a login endpoint so we can use jwt tokens.
+router.post("/login", async (req, res) => {
+    databasePool.getConnection((err, connection) => {
+        
+        if (err) {
+            return res.status(500).json({error: "Database connection failure:" + err.message});
+        }
+
+        // Get the json from the login request.
+        const {userName, password} = req.body;
+
+        // Init the values array and field names to ensure all required fields are present.
+        let values = [userName, password];
+        let requiredFields = ["userName", "password"];
+
+        // Ensure all data is present for user login and add values to the values array.
+        for (let i = 0; i < values.length; i++) {
+            if (!values[i]) {
+                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
+            }
+        }
+
+        // Make an async query.
+        const request = "SELECT * FROM users WHERE USER_NAME = ?";
+        results = asyncDatabaseQuery(request, values);
+        
+        // Check that the password passed to this endpoint matches the password found from the query.
+        if (values[1] == results.PASSWORD) {
+            // Need to init a jwt token with the users information and return a success statment back the frontend here. 
+        }
+
+        // Here the password was incorrect, send back a failure.
+    });
+});
+
+
+
+
 // Add user
 router.post("/add", (req, res) => {
 
@@ -99,13 +170,13 @@ router.post("/add", (req, res) => {
         }
 
         // Get the json from the request.
-        const {firstName, lastName, userName, password, phoneNumber, email} = req.body;
+        const {firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.body;
 
         // Init the values array and field names to ensure all required fields are present.
-        let values = [firstName, lastName, userName, password, phoneNumber, email];
-        let requiredFields = ["firstName", "lastName", "userName", "password", "phoneNumber", "email"];
+        let values = [firstName, lastName, userName, password, phoneNumber, email, timeZone];
+        let requiredFields = ["firstName", "lastName", "userName", "password", "phoneNumber", "email", "timeZone"];
 
-        // Ensure all data is present for new user and add values to the values array.
+        // Ensure all data is present for new user
         for (let i = 0; i < values.length; i++) {
             if (!values[i]) {
                 return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
@@ -113,7 +184,7 @@ router.post("/add", (req, res) => {
         }
 
         // Contruct the sql insert statement.
-        let request = "INSERT INTO users (FIRST_NAME, LAST_NAME, USER_NAME, PASSWORD, PHONE_NUMBER, EMAIL) VALUES (?,?,?,?,?,?)";
+        let request = "INSERT INTO users (FIRST_NAME, LAST_NAME, USER_NAME, PASSWORD, PHONE_NUMBER, EMAIL, TIMEZONE) VALUES (?,?,?,?,?,?,?)";
 
         // Execute the statement.
         connection.query(request, values, (err, results) => {

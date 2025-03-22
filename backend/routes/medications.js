@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
+const {convertUTCToTimeZone, convertTimeToUTC} = require("./utils");
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -103,7 +104,7 @@ router.get("/search", (req, res) => {
     });
 });
 
-// Add
+// Add: NEED TO IMPLEMENT A JWT TOKEN FOR USERS.
 router.post("/add", (req, res) => {
 
     // Get a connection
@@ -114,7 +115,7 @@ router.post("/add", (req, res) => {
         }
         
         // Get the JSON package from the request.
-        const {medName, currentQuantity, amountToTake, refillQuantity, dateStarted, daysUntilRefill, takeInterval, timeToTakeAt, isTimeAM, userId} = req.body;
+        const {medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId} = req.body;
     
         // Init the values array and make sure all the needed values are present.
         let values = [medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId];
