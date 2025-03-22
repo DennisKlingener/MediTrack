@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
+const jwt = require('jsonwebtoken');
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -33,7 +34,25 @@ async function asyncDatabaseQuery(request, values) {
 }
 
 
+function createJWTToken(user) {
 
+    const payload = {
+        userId: user.id,
+        firstName: user.FIRST_NAME,
+        lastName: user.LAST_NAME,
+        userName: user.USER_NAME,
+        password: user.PASSWORD,
+        phoneNumber: user.PHONE_NUMBER,
+        email: user.EMAIL,
+        timeZone: user.TIMEZONE
+    }
+
+    const secretKey = crypto.randomBytes(32).toString('hex');
+
+    const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
+
+    return token;
+}
 
 
 // Get user with paramters {[para: meters]}
@@ -148,14 +167,20 @@ router.post("/login", async (req, res) => {
 
     // Check that the password passed to this endpoint matches the password found from the query.
     if (values[1] == results[0].PASSWORD) {
+
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
 
-        return res.status(200).json({
-            "loginComplete": true
-        });
+        const token = createJWTToken(results[0]);
 
+        return res.status(200).json({
+            "loginComplete": true,
+            "token": token
+        });
     }
+
+
+    // Here the password was incorrect, send back a failure.
 
     console.log("passwords dont match!");
 
@@ -163,8 +188,6 @@ router.post("/login", async (req, res) => {
         "loginComplete": false,
         "message": "INCORRECT_PASSWORD"
     });
-
-    // Here the password was incorrect, send back a failure.
 });
 
 
