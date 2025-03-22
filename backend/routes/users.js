@@ -147,10 +147,18 @@ router.post("/login", async (req, res) => {
         const request = "SELECT * FROM users WHERE USER_NAME = ?";
         results = asyncDatabaseQuery(request, values);
         
+
+        console.log(results);
+
+
         // Check that the password passed to this endpoint matches the password found from the query.
         if (values[1] == results.PASSWORD) {
             // Need to init a jwt token with the users information and return a success statment back the frontend here. 
+            console.log("passwords match!");
         }
+
+
+        console.log("passwords dont match!");
 
         // Here the password was incorrect, send back a failure.
     });
