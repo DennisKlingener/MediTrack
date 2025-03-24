@@ -43,7 +43,7 @@ function createJWTToken(user) {
         timeZone: user.TIMEZONE
     }
 
-    const secretKey = crypto.randomBytes(32).toString('hex');
+    const secretKey = "CHANGE_THIS_KEY";
 
     const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
 
