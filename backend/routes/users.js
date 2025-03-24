@@ -198,9 +198,6 @@ router.post("/login", async (req, res) => {
     });
 });
 
-
-
-
 // Add user
 router.post("/add", (req, res) => {
 

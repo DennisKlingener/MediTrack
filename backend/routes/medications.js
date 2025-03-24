@@ -104,7 +104,7 @@ router.get("/search", (req, res) => {
     });
 });
 
-// Add: NEED TO IMPLEMENT A JWT TOKEN FOR USERS.
+// Add
 router.post("/add", (req, res) => {
 
     // Get a connection
