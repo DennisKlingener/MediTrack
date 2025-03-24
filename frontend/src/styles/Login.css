@@ -3,27 +3,27 @@
     align-content: center;
 }
 
-
-
-
-
-
+#signUpFormTitle {
+    font-size: 35px;
+}
 
 #signUpForm {
-    color: red;
+    border-style: solid;
+    border-width: 5px;
+    border-color: royalblue;
+    border-radius: 15%;
 
-    
-
-
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+    padding-right: 30px;
 }
 
 #signInFormTitle {
     font-size: 35px;
 }
 
-
 #signInForm {
-
     border-style: solid;
     border-width: 5px;
     border-color: royalblue;
