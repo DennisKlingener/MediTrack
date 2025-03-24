@@ -26,6 +26,7 @@
     - Follow the steps to complete opening a pull request.
     - For each pull request a pipeline will run to again ensure the project with your new code builds successfully.
         - Note: This test must pass in order for you to merge. 
+    - If the update button is present make sure to press it to ensure your branch is up to date with main!!!
     - When available, select the green merge / pull button.
         - This will pull your feature branch into main.
     - On a successful pull / merge into main, another gitlab action will take the new changes to main and automatically push them to the live server for you. You can track this jobs progress under "actions" on the github.
