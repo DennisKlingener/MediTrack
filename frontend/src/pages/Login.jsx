@@ -94,7 +94,7 @@ function Login() {
     // CODE FOR SIGN UP \\
 
     const [signUpFormData, setSignUpFormData] = useState({
-        fistName: "",
+        firstName: "",
         lastName: "",
         userName: "",
         phoneNumber: "",
@@ -109,7 +109,7 @@ function Login() {
 
         // Get the entered data
         const data = {
-            fistName: signUpFormData.fistName,
+            firstName: signUpFormData.firstName,
             lastName: signUpFormData.lastName,
             userName: signUpFormData.userName,
             phoneNumber: signUpFormData.phoneNumber,
