@@ -40,6 +40,7 @@
     - profile page
         - Need UI to add and delete medications here.
     - all the logic to connect to the api/backend
+    - Make everything look nice
 - Backend:
     - Cron job to check for medications that will need a refill soon
     - Cron job to check for medications that are taken at an interval (Get meds to take at a specific time working first)
