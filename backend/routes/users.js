@@ -173,9 +173,17 @@ router.post("/login", async (req, res) => {
 
         const token = createJWTToken(results[0]);
 
+        // Store the token in a http cookie.
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 60 * 60 * 1000
+        });
+
         return res.status(200).json({
             "loginComplete": true,
-            "token": token
+            "message": "LOGIN_COMPLETE"
         });
     }
 

@@ -114,18 +114,36 @@ router.post("/add", (req, res) => {
             return res.status(500).json({error: "Database connection failure:" + err.message});
         }
         
-        // Get the JSON package from the request.
+        // Get the JSON package from the request. 
         const {medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId} = req.body;
     
         // Init the values array and make sure all the needed values are present.
         let values = [medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId];
         let requiredFields = ["medName", "currentQuantity", "amountToTake", "refillQuantity", "dateStarted", "takeInterval", "timeToTakeAt", "isTimeAM", "userId"];
 
-        // Ensure all data is present for new user and add values to the values array.
+        // Ensure all data is present for new medication and add values to the values array.
         for (let i = 0; i < values.length; i++) {
             if (!values[i]) {
-                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
+                return res.status(500).json({error: `New medication data ${requiredFields[i]} is missing`});
             }
+        }
+
+        
+        // The currently logged in user will have entered the time to take at in their respectiove time zone, we must convert it to UTC before storing in the database.
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(403).json({error: "No JWT token provided"});
+        }  
+
+        // Get the timezone from the jwt token, convert it, and overwrite the entered time in values.
+        try {
+            const decodedToken = jwt.verify(token); // NEED A KNOWN SECRET KEY HERE TO VERIFY JWT TOKEN.
+            const timeZone = decodedToken.timeZone;
+            const convertedTime = convertTimeToUTC(values[6], timeZone);
+            values[6] = convertedTime;
+        } catch (err) {
+            return res.status(500).json({error: `Error reading from jwt token: ${err}`}); 
         }
 
         let request = "INSERT INTO medications (MED_NAME, CURRENT_QUANTITY, AMOUNT_TO_TAKE, REFILL_QUANTITY, DATE_STARTED, TAKE_INTERVAL, TIME_TO_TAKE_AT, IS_TIME_AM, USER_ID) VALUES(?,?,?,?,?,?,?,?,?)";
