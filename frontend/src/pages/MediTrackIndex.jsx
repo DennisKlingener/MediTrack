@@ -19,9 +19,6 @@ function MediTrackIndex() {
 
         navigate('/Login', {state: { data:data } });
     };
-
-
-
         
     return (
         <div id='MediTrackIndexContainer' className="container-fluid">

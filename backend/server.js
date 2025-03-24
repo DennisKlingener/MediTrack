@@ -1,10 +1,14 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const userRouter = require("./routes/users");
 const medicationRouter = require("./routes/medications");
 
 const app = express();
 app.use(express.json());
+
+// Allow the use of cookies in our API routes.
+app.use(cookieParser());
 
 // Import the cron jobs for the server.
 require("./cronJobs");
