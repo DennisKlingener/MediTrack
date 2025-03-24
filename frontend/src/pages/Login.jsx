@@ -77,7 +77,7 @@ function Login() {
 
             // Check if the login was successful.
             if (result.loginComplete) {
-                navigate("/ProfilePage");
+                navigate("/Profile");
             } else {
                 // put an error message here.
                 console.log("WIP");
