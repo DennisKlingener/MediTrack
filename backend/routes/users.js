@@ -10,9 +10,6 @@ router.use(express.json());
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
 
-
-
-
 // PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
 async function asyncDatabaseQuery(request, values) {
     try {
@@ -33,7 +30,6 @@ async function asyncDatabaseQuery(request, values) {
     }
 }
 
-
 function createJWTToken(user) {
 
     const payload = {
@@ -53,7 +49,6 @@ function createJWTToken(user) {
 
     return token;
 }
-
 
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
@@ -139,8 +134,7 @@ router.get("/search", (req, res) => {
     });
 });
 
-
-// Should probably make a login endpoint so we can use jwt tokens.
+// Login
 router.post("/login", async (req, res) => {
     
     // Get the json from the login request.
@@ -159,7 +153,7 @@ router.post("/login", async (req, res) => {
 
     // Make an async query.
     const request = "SELECT * FROM users WHERE USER_NAME = ?";
-    results = await asyncDatabaseQuery(request, values);
+    const results = await asyncDatabaseQuery(request, values);
     
 
     console.log(results);
@@ -185,58 +179,51 @@ router.post("/login", async (req, res) => {
             "loginComplete": true,
             "message": "LOGIN_COMPLETE"
         });
+    } else {
+        // Here the password was incorrect, send back a failure.
+        console.log("passwords dont match!");
+
+        return res.status(200).json({
+            "loginComplete": false,
+            "message": "INCORRECT_PASSWORD"
+        });
     }
-
-
-    // Here the password was incorrect, send back a failure.
-
-    console.log("passwords dont match!");
-
-    return res.status(200).json({
-        "loginComplete": false,
-        "message": "INCORRECT_PASSWORD"
-    });
 });
 
 // Add user
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
 
-    // Get a connection 
-    databasePool.getConnection((err, connection) => {
-        
-        if (err) {
-            return res.status(500).json({error: "Database connection failure:" + err.message});
+    // Get the json from the request.
+    const {firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.body;
+
+    // Init the values array and field names to ensure all required fields are present.
+    let values = [firstName, lastName, userName, password, phoneNumber, email, timeZone];
+    let requiredFields = ["firstName", "lastName", "userName", "password", "phoneNumber", "email", "timeZone"];
+
+    // Ensure all data is present for new user
+    for (let i = 0; i < values.length; i++) {
+        if (!values[i]) {
+            return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
         }
+    }
 
-        // Get the json from the request.
-        const {firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.body;
+    // Contruct the sql insert statement.
+    let request = "INSERT INTO users (FIRST_NAME, LAST_NAME, USER_NAME, PASSWORD, PHONE_NUMBER, EMAIL, TIMEZONE) VALUES (?,?,?,?,?,?,?)";
 
-        // Init the values array and field names to ensure all required fields are present.
-        let values = [firstName, lastName, userName, password, phoneNumber, email, timeZone];
-        let requiredFields = ["firstName", "lastName", "userName", "password", "phoneNumber", "email", "timeZone"];
+    const results = await asyncDatabaseQuery(request, values);
 
-        // Ensure all data is present for new user
-        for (let i = 0; i < values.length; i++) {
-            if (!values[i]) {
-                return res.status(500).json({error: `New user data ${requiredFields[i]} is missing`});
-            }
-        }
-
-        // Contruct the sql insert statement.
-        let request = "INSERT INTO users (FIRST_NAME, LAST_NAME, USER_NAME, PASSWORD, PHONE_NUMBER, EMAIL, TIMEZONE) VALUES (?,?,?,?,?,?,?)";
-
-        // Execute the statement.
-        connection.query(request, values, (err, results) => {
-
-            connection.release();
-
-            if (err) {
-                return res.status(500).json({error: err.message});
-            }
-
-            res.json(results);
+    // add user should be complete....
+    if (results) {
+        return res.status(200).json({
+            "signUpComplete": true,
+            "message": "USER_ADDED"
         });
-    });
+    } else {
+        return res.status(500).json({
+            "signUpComplete": false,
+            "message": "ADD_USER_FAILURE"
+        });
+    } 
 });
 
 // Remove user associated with the passed in id.
