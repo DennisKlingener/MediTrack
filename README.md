@@ -63,6 +63,7 @@
 ## Notes:
 - Wont be able to test the jwt token stuff until the signup page is done and functional.
     - With the jwt token code, we wont be able to use curl to add meds. Do it inside the server.
+- JWT tokens must be, and can only be, accessed by a HTTP request / endpoint.
 
 ## Command to insert new user:
 - curl -H "Content-Type: application/json" -d '{"firstName":"API", "lastName":"TEST", "userName":"APITEST", "password":"TEST123", "phoneNumber":"555-555-5555", "email":"test@email.com"}' http://159.203.164.160:5000/routes/users/add

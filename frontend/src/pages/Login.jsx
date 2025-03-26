@@ -91,6 +91,8 @@ function Login() {
     // END LOGIN CODE \\
 
 
+
+    
     // CODE FOR SIGN UP \\
 
     const [signUpFormData, setSignUpFormData] = useState({
@@ -152,7 +154,6 @@ function Login() {
             console.log("Error signing up new user: ", err);
         }
     }
-
 
     // END CODE FOR SIGN UP \\
 
