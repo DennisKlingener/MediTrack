@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const {convertUTCToTimeZone, convertTimeToUTC} = require("../utils");
+const { decode } = require("jsonwebtoken");
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -9,6 +10,28 @@ router.use(express.json());
 // Port that the server is running on.
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
+
+// PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
+async function asyncDatabaseQuery(request, values) {
+    try {
+        const results = await new Promise((resolve, reject) => {
+            databasePool.getConnection((err, connection) => {
+                if (err) reject(err);
+                connection.query(request, values, (err, results) => {
+                    connection.release();
+                    if (err) reject(err);
+                    resolve(results);
+                });
+            });
+        });
+
+        return results;
+    } catch (err) {
+        console.log("Error in asyncDatabaseQuery: ", err);
+    }
+}
+
+
 
 // Search 
 router.get("/search", (req, res) => {
@@ -197,6 +220,39 @@ router.delete("/delete/:userId/:medName", (req,res) => {
 
 // Update
 // Need this if we want users to be able to edit med info after entering it.
+
+
+// Get all medications for a specific user using JWT token
+router.get("/usermeds", async (req, res) => {
+
+    // Get the JWT token for the user.
+    const token = req.cookies.token; 
+
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+
+        // Decode the token.
+        const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY");
+
+        // Create the base query.
+        let request = "SELECT * FROM medications WHERE USER_ID = ?";
+        let values = [decodedToken.userId];
+
+        // Make the query for all the users meds by id
+        const results = await asyncDatabaseQuery(request, values);
+
+        // Return the results to the front end.
+        return res.json(results);
+
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid token" });
+    }
+});
+
+
 
 
 module.exports = router;
