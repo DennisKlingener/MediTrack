@@ -59,6 +59,7 @@
 - Need to ensure the front end login has a controlled time zone drop down menu to match whats expected in the endpoints etc.
 - Need to place our api endpoints in our .env or a gitlab secret. These need to be secure.
 - Implement error messages in the UI for login and signup errors.
+- Need to add JWT authentication for webpages so someone cant jump to profile.
 
 ## Notes:
 - Wont be able to test the jwt token stuff until the signup page is done and functional.

@@ -42,6 +42,13 @@ function Login() {
     }, []);
 
 
+    const toggleForms = () => {
+        setSignUpForm(!signUpForm);
+        setSignInForm(!signInForm);
+    }
+
+
+
     // CODE FOR LOGIN \\
 
     const [signInFormData, setSignInFormData] = useState ({
@@ -92,7 +99,7 @@ function Login() {
 
 
 
-    
+
     // CODE FOR SIGN UP \\
 
     const [signUpFormData, setSignUpFormData] = useState({
@@ -169,164 +176,173 @@ function Login() {
 
                 <div className="col-auto text-center">
 
-                    {signUpForm && 
+                    {signUpForm &&   
                         <div id='signUpForm'>
+                            <div className="row">            
+                                <div className="signUpFormTitle">Sign Up</div>
+                                <div className="col-sm">
+                                    {/* first name */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="firstNameSignUpLabel">First Name</label>
+                                        <input
+                                            id="firstNameSignUpInput"
+                                            className="form-control"
+                                            name="firstName"
+                                            type="text"
+                                            value={signUpFormData.firstName}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="First Name"
+                                        />
+                                    </div>
 
-                            {/* first name */}
-                            <div className="signUpFormTitle">Sign Up</div>
-                            <div className="form-group mt-2 mb-2">
-                                <label for="firstNameSignUpLabel">First Name</label>
-                                <input
-                                    id="firstNameSignUpInput"
-                                    className="form-control"
-                                    name="firstName"
-                                    type="text"
-                                    value={signUpFormData.firstName}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="First Name"
-                                />
+                                    {/* Last name */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="lastNameSignUpLabel">Last Name</label>
+                                        <input
+                                            id="lastNameSignUpInput"
+                                            className="form-control"
+                                            name="lastName"
+                                            type="text"
+                                            value={signUpFormData.lastName}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Last Name"
+                                        />
+                                    </div>
+
+                                    {/* User name */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="userNameSignUpLabel">User Name</label>
+                                        <input
+                                            id="userNameSignUpInput"
+                                            className="form-control"
+                                            name="userName"
+                                            type="text"
+                                            value={signUpFormData.userName}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="User Name"
+                                        />
+                                    </div>
+
+                                    {/* Phone number */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="phoneNumberSignUpLabel">Phone Number</label>
+                                        <input
+                                            id="PhoneNumberSignUpInput"
+                                            className="form-control"
+                                            name="phoneNumber"
+                                            type="tel"
+                                            value={signUpFormData.phoneNumber}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Phone Number"
+                                        />
+                                    </div>
+                                </div>
+                                
+                                <div className="col-sm">
+
+                                    {/* Email */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="emailSignUpLabel">Email</label>
+                                        <input
+                                            id="emailSignUpInput"
+                                            className="form-control"
+                                            name="email"
+                                            type="email"
+                                            value={signUpFormData.email}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Email"
+                                        />
+                                    </div>
+                                    
+                                    {/* Timezone */}
+                                    {/* THIS NEEDS TO BE A DROP DOWN!!!!!!! */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="timeZoneSignUpLabel">Time Zone</label>
+                                        <input
+                                            id="timeZoneSignUpInput"
+                                            className="form-control"
+                                            name="timeZone"
+                                            type="text"
+                                            value={signUpFormData.timeZone}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Time Zone"
+                                        />
+                                    </div>
+
+                                    {/* Password */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="passwordSignUpLabel">Password</label>
+                                        <input
+                                            id="passwordSignUpInput"
+                                            className="form-control"
+                                            name="password"
+                                            type="password"
+                                            value={signUpFormData.password}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Password"
+                                        />
+                                    </div>
+
+                                    {/* Password check */}
+                                    <div className="form-group mt-2 mb-2">
+                                        <label for="passwordCheckSignUpLabel">Re-type Password</label>
+                                        <input
+                                            id="passwordCheckSignUpInput"
+                                            className="form-control"
+                                            name="passwordCheck"
+                                            type="password"
+                                            value={signUpFormData.passwordCheck}
+                                            onChange={(e) => {
+                                                setSignUpFormData({
+                                                    ...signUpFormData,
+                                                    [e.target.name]: e.target.value
+                                                });
+                                            }}
+                                            placeholder="Re-type Password"
+                                        />
+                                    </div>      
+                                </div>
                             </div>
-
-                            {/* Last name */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="lastNameSignUpLabel">Last Name</label>
-                                <input
-                                    id="lastNameSignUpInput"
-                                    className="form-control"
-                                    name="lastName"
-                                    type="text"
-                                    value={signUpFormData.lastName}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Last Name"
-                                />
-                            </div>
-
-                            {/* User name */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="userNameSignUpLabel">User Name</label>
-                                <input
-                                    id="userNameSignUpInput"
-                                    className="form-control"
-                                    name="userName"
-                                    type="text"
-                                    value={signUpFormData.userName}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="User Name"
-                                />
-                            </div>
-
-                            {/* Phone number */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="phoneNumberSignUpLabel">Phone Number</label>
-                                <input
-                                    id="PhoneNumberSignUpInput"
-                                    className="form-control"
-                                    name="phoneNumber"
-                                    type="tel"
-                                    value={signUpFormData.phoneNumber}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Phone Number"
-                                />
-                            </div>
-
-                            {/* Email */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="emailSignUpLabel">Email</label>
-                                <input
-                                    id="emailSignUpInput"
-                                    className="form-control"
-                                    name="email"
-                                    type="email"
-                                    value={signUpFormData.email}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Email"
-                                />
-                            </div>
-                            
-                            {/* Timezone */}
-                            {/* THIS NEEDS TO BE A DROP DOWN!!!!!!! */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="timeZoneSignUpLabel">Time Zone</label>
-                                <input
-                                    id="timeZoneSignUpInput"
-                                    className="form-control"
-                                    name="timeZone"
-                                    type="text"
-                                    value={signUpFormData.timeZone}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Time Zone"
-                                />
-                            </div>
-
-                            {/* Password */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="passwordSignUpLabel">Password</label>
-                                <input
-                                    id="passwordSignUpInput"
-                                    className="form-control"
-                                    name="password"
-                                    type="password"
-                                    value={signUpFormData.password}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Password"
-                                />
-                            </div>
-
-                            {/* Password check */}
-                            <div className="form-group mt-2 mb-2">
-                                <label for="passwordCheckSignUpLabel">Re-type Password</label>
-                                <input
-                                    id="passwordCheckSignUpInput"
-                                    className="form-control"
-                                    name="passwordCheck"
-                                    type="password"
-                                    value={signUpFormData.passwordCheck}
-                                    onChange={(e) => {
-                                        setSignUpFormData({
-                                            ...signUpFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Re-type Password"
-                                />
-                            </div> 
-
+                          
                             <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
+                            <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
+                            
+                            
                         </div> 
                     }
 
@@ -370,9 +386,9 @@ function Login() {
                             </div>
 
                             <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
+                            <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
                         </div>
                     }
-
                 </div>
             </div>
         </div>
