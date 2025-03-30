@@ -244,6 +244,8 @@ router.get("/usermeds", async (req, res) => {
         // Make the query for all the users meds by id
         const results = await asyncDatabaseQuery(request, values);
 
+        console.log("Here is results in the try:", results);
+
         // Return the results to the front end.
         return res.json(results);
 
