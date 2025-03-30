@@ -167,6 +167,8 @@ router.post("/login", async (req, res) => {
 
         const token = createJWTToken(results[0]);
 
+        console.log("Generated JWT Token:", token);
+
         // Store the token in a http cookie.
         res.cookie("token", token, {
             httpOnly: true,
