@@ -73,6 +73,7 @@ function Login() {
 
             const response = await fetch(apiURL, {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     'Content-Type': 'application/json',
                 },

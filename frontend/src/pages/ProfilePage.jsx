@@ -21,8 +21,7 @@ function ProfilePage() {
         });
 
         const result = await response.json();
-        console.log(result);
-    
+        console.log("Here is result: ",result);
     }, []);
 
 
