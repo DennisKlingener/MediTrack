@@ -16,7 +16,8 @@ function ProfilePage() {
         const apiURL = "http://159.203.164.160:5000/routes/medications/usermeds";
 
         const response = await fetch(apiURL, {
-            method: "GET"
+            method: "GET",
+            credentials: "include", // Required to send cookies
         });
 
         const result = await response.json();
