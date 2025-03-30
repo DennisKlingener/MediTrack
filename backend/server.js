@@ -1,17 +1,10 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const path = require("path");
-const cors = require("cors");
 const userRouter = require("./routes/users");
 const medicationRouter = require("./routes/medications");
 
 const app = express();
-
-app.use(cors({
-  origin: "http://159.203.164.160:5000/", // Replace with your frontend URL
-  credentials: true // Allow cookies to be sent
-}));
-
 app.use(express.json());
 
 // Allow the use of cookies in our API routes.
