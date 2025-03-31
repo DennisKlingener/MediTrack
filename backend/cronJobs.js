@@ -24,7 +24,7 @@ async function asyncDatabaseQuery(request, values) {
 }
 
 // Checks all entries that have a TIME_TO_TAKE_VALUE.
-cron.schedule("* * * * *", async () => {
+cron.schedule("0 * * * *", async () => {
 
     // Get all the entires whos time to take is equal to the current time.
 

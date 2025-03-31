@@ -263,4 +263,20 @@ router.delete("/delete/:id", (req, res) => {
 
 // Edit user... not 100% needed...
 
+
+// Testing
+app.get('/set-test-cookie', (req, res) => {
+    try {
+        res.cookie("test", "hello", { httpOnly: true, sameSite: "strict" });
+        res.send("Test cookie set");
+    } catch (err) {
+        console.log("error: ", err);
+    }
+ });
+
+
+
+
+
+
 module.exports = router;
