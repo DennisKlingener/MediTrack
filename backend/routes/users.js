@@ -43,9 +43,6 @@ function createJWTToken(user) {
         timeZone: user.TIMEZONE
     }
 
-
-    console.log("Here is the payload: ", payload);
-
     const secretKey = "CHANGE_THIS_KEY";
 
     const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
@@ -170,10 +167,9 @@ router.post("/login", async (req, res) => {
 
         const token = createJWTToken(results[0]);
 
-        console.log("Generated JWT Token:", token);
-
         // Store the token in a http cookie.
         res.cookie("token", token, {
+            httpOnly: true,
             secure: true,
             sameSite: "strict",
         });
@@ -264,21 +260,5 @@ router.delete("/delete/:id", (req, res) => {
 });
 
 // Edit user... not 100% needed...
-
-
-// Testing
-router.get('/set-test-cookie', (req, res) => {
-    try {
-        res.cookie("test", "hello", { httpOnly: true, sameSite: "strict" });
-        res.send("Test cookie set");
-    } catch (err) {
-        console.log("error: ", err);
-    }
- });
-
-
-
-
-
 
 module.exports = router;

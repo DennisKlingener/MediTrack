@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const {convertUTCToTimeZone, convertTimeToUTC} = require("../utils");
-const { decode } = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -226,38 +226,36 @@ router.delete("/delete/:userId/:medName", (req,res) => {
 router.get("/usermeds", async (req, res) => {
 
     // Get the JWT token for the user.
-    // const token = req.cookies.token; 
+    const token = req.cookies.token; 
 
     console.log(req.cookies);
 
-    // const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({message: "Token not found" });
+    }
 
-    // if (!token) {
-    //     return res.status(401).json({message: "Token not found" });
-    // }
+    try {
 
-    // try {
+        // Decode the token.
+        const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY");
 
-    //     // Decode the token.
-    //     const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY");
+        console.log("Decoded token: ", decodedToken);
 
-    //     console.log("Decoded token: ", decodedToken);
+        // Create the base query.
+        let request = "SELECT * FROM medications WHERE USER_ID = ?";
+        let values = [decodedToken.userId];
 
-    //     // Create the base query.
-    //     let request = "SELECT * FROM medications WHERE USER_ID = ?";
-    //     let values = [decodedToken.userId];
+        // Make the query for all the users meds by id
+        const results = await asyncDatabaseQuery(request, values);
 
-    //     // Make the query for all the users meds by id
-    //     const results = await asyncDatabaseQuery(request, values);
+        console.log("Here is results in the try:", results);
 
-    //     console.log("Here is results in the try:", results);
+        // Return the results to the front end.
+        return res.json(results);
 
-    //     // Return the results to the front end.
-    //     return res.json(results);
-
-    // } catch (err) {
-    //     return res.status(403).json({ message: "Invalid token" });
-    // }
+    } catch (err) {
+        return res.status(403).json({ message: "Invalid token" });
+    }
 });
 
 
