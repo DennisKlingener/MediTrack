@@ -43,6 +43,9 @@ function createJWTToken(user) {
         timeZone: user.TIMEZONE
     }
 
+
+    console.log("Here is the payload: ", payload);
+
     const secretKey = "CHANGE_THIS_KEY";
 
     const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});

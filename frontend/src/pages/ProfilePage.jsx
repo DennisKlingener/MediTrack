@@ -11,8 +11,20 @@ function ProfilePage() {
     // Runs immediatly after the page is loaded.
     useEffect(async () => {
 
+        // Wait for cookies to be set from the login.
+        const delayAction = async () => {
+            console.log("Starting to sleep...");
+            await sleep(5000); // Sleep for 2 seconds
+            console.log("Awoke after 2 seconds!");
+            setMessage("Done waiting!");
+        };
+
+        delayAction();
+
+
+
+
         // Call the apiendppint.
-        
         const apiURL = "http://159.203.164.160:5000/routes/medications/usermeds";
 
         const response = await fetch(apiURL, {
