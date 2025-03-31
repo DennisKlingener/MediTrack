@@ -30,7 +30,7 @@ function ProfilePage() {
 
         const response = fetch(apiURL, {
             method: "GET",
-            credentials: "include", // Required to send cookies
+            // credentials: "include", // Required to send cookies
         });
 
         const result = response.json();
