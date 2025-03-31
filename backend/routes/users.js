@@ -164,6 +164,8 @@ router.post("/login", async (req, res) => {
             "loginComplete": true,
             "message": "LOGIN_COMPLETE"
         });
+        // Here we connect firebase to react and mysql database
+        
     } else {
         // Here the password was incorrect, send back a failure.
         console.log("passwords dont match!");
