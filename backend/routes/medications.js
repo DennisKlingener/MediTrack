@@ -230,16 +230,18 @@ router.get("/usermeds", async (req, res) => {
 
     console.log(req.cookies);
 
-    const token = req.token;
+    const token = req.cookies.token;
 
-    if (!token) {
-        return res.status(401).json({ message: "Unauthorized" });
-    }
+    // if (!token) {
+    //     return res.status(401).json({ message: "Unauthorized" });
+    // }
 
     try {
 
         // Decode the token.
         const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY");
+
+        console.log("Decoded token: ", decodedToken);
 
         // Create the base query.
         let request = "SELECT * FROM medications WHERE USER_ID = ?";
