@@ -226,7 +226,11 @@ router.delete("/delete/:userId/:medName", (req,res) => {
 router.get("/usermeds", async (req, res) => {
 
     // Get the JWT token for the user.
-    const token = req.cookies.token; 
+    // const token = req.cookies.token; 
+
+    console.log(req.cookies);
+
+    const token = req.token;
 
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
