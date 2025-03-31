@@ -182,6 +182,8 @@ router.post("/login", async (req, res) => {
             "loginComplete": true,
             "message": "LOGIN_COMPLETE"
         });
+        // go to dual authentication
+        // comes back and goes to dashboard
     } else {
         // Here the password was incorrect, send back a failure.
         console.log("passwords dont match!");
