@@ -265,7 +265,7 @@ router.delete("/delete/:id", (req, res) => {
 
 
 // Testing
-app.get('/set-test-cookie', (req, res) => {
+router.get('/set-test-cookie', (req, res) => {
     try {
         res.cookie("test", "hello", { httpOnly: true, sameSite: "strict" });
         res.send("Test cookie set");
