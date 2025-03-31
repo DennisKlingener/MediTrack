@@ -168,7 +168,7 @@ router.post("/login", async (req, res) => {
         const token = createJWTToken(results[0]);
 
         // Store the token in a http cookie.
-        res.cookie("token", token, {
+        res.cookie("token", JSON.stringify(results[0]), {
             httpOnly: true,
             secure: true,
             sameSite: "strict",
