@@ -43,11 +43,11 @@ function createJWTToken(user) {
         timeZone: user.TIMEZONE
     }
 
-    const secretKey = "CHANGE_THIS_KEY";
+    // const secretKey = "CHANGE_THIS_KEY";
 
-    const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
+    // const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
 
-    return token;
+    return payload;
 }
 
 // Get user with paramters {[para: meters]}
