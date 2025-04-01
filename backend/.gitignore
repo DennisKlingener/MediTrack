@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Firebase service account key
+firebaseServiceAccountKey.json
+
+# Logs
+logs
+*.log
+
+# Dependency directories
+jspm_packages/
+
+# Build output
+dist/
+build/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE or editor directories
+.idea/
+.vscode/
+
+# OS files
+*.swp
+*.swo
+
+# Other files to ignore
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
