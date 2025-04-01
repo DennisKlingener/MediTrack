@@ -141,7 +141,7 @@ router.get("/search", (req, res) => {
 router.post("/login", async (req, res) => {
     
     // Get the json from the login request.
-    const {userName, password} = req.body;
+   const {userName, password} = req.body;
 
     // Init the values array and field names to ensure all required fields are present.
     let values = [userName, password];
@@ -181,9 +181,7 @@ router.post("/login", async (req, res) => {
         return res.status(200).json({
             "loginComplete": true,
             "message": "LOGIN_COMPLETE"
-        });
-        // Here we connect firebase to react and mysql database
-        
+        });        
     } else {
         // Here the password was incorrect, send back a failure.
         console.log("passwords dont match!");
@@ -193,6 +191,13 @@ router.post("/login", async (req, res) => {
             "message": "INCORRECT_PASSWORD"
         });
     }
+    
+    // Here we connect firebase to react and mysql database
+    return res.status(200).json({
+        "passwordVerified": true,
+        "phoneNumber": user.PHONE_NUMBER,
+        "message": "PASSWORD_VALID_PROCEED_TO_FIRERBASE_2FA"
+    )};
 });
 
 // Add user
