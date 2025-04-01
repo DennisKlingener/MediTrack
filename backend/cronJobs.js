@@ -58,10 +58,25 @@ cron.schedule("0 * * * *", async () => {
 
     console.log("here is values:", values);
 
-    // async query.
+    // async query. array of medications needed to be taken 
     const results = await asyncDatabaseQuery(selectRequest, values);
 
     // AT THIS POINT WE WOULD NEED TO IMPLEMENT A METHOD THAT GETS THE PHONE NUMBER OF THE USERS IN THE RETURNED RESUSLTS AND SEND THEM A TEXT MESSAGE!!!!
+
+
+
+
+
+
+
+
+
+    //update phone numbers in database format +15555555555
+        //add +1 take away any dashes, spaces, or parenthesis
+    //if the user does not have phone number listed, skip sending the message
+    //if the user does not have a valid phone number, skip sending message 
+
+
 
     // Make allthe neccesary updates to the returned results.
     const updateRequest = "UPDATE medications SET CURRENT_QUANTITY = ? WHERE USER_ID = ? AND MED_NAME = ?";
