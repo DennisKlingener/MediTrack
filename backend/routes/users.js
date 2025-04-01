@@ -165,13 +165,27 @@ router.post("/login", async (req, res) => {
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
 
-        const token = createJWTToken(results[0]);
+        // const token = createJWTToken(results[0]);
+
+
+
+        const token = jwt.sign(
+            {userId: results[0].id,
+            firstName: results[0].FIRST_NAME,
+            lastName: results[0].LAST_NAME,
+            userName: results[0].USER_NAME,
+            password: results[0].PASSWORD,
+            phoneNumber: results[0].PHONE_NUMBER,
+            email: results[0].EMAIL,
+            timeZone: results[0].TIMEZONE }, 
+            "CHANGE_THIS_KEY", 
+            {expiresIn: "2h"});
 
         // Store the token in a http cookie.
-        res.cookie("token", JSON.stringify(results[0]), {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
+        res.cookie("token", token, {
+            httpOnly: false,
+            secure: false,
+            sameSite: "lax"
         });
 
         return res.status(200).json({
