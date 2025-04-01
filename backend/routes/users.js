@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const admin = require('firebase-admin');
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -9,6 +11,12 @@ router.use(express.json());
 // Port that the server is running on.
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
+
+// Initialize Firebase Admin (ensure you've added your service account file in the backend)
+const serviceAccount = require('../firebaseServiceAccountKey.json');
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+});
 
 // PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
 async function asyncDatabaseQuery(request, values) {
@@ -33,7 +41,7 @@ async function asyncDatabaseQuery(request, values) {
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
 // SELECT * FROM users WHERE <parameters>;
-router.get("/search", (req, res) => {
+/*router.get("/search", (req, res) => {
 
     // Get the passed in parameters to search by.
     const {id, firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.query;
@@ -114,6 +122,43 @@ router.get("/search", (req, res) => {
     });
 });
 
+const serviceAccount = require("firebaseServiceAccountkey.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    )};
+*/
+router.post("/verify-phone", async (req, res) => {
+    const { idToken, phoneNumber } = req.body;
+
+    if (!idToken || !phoneNumber) {
+        return res.status(400).json({ error: 'ID token and phone number are required' });
+    }
+
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        console.log('Decoded Token:', decodedToken);
+
+        const query = "SELECT * FROM users WHERE PHONE_NUMBER = ?";
+        const results = await asyncDatabaseQuery(query, [phoneNumber]);
+
+        if (!results || results.length === 0) {
+            const insertQuery = "INSERT INTO users (USER_NAME, PHONE_NUMBER) VALUES (?, ?)";
+            await asyncDatabaseQuery(insertQuery, ['New User', phoneNumber]);
+        }
+
+        const customToken = await admin.auth().createCustomToken(decodedToken.uid);
+
+        res.status(200).json({
+            loginComplete: true,
+            message: "Phone number verified",
+            token: customToken,
+        });
+    } catch (err) {
+        console.error('Error verifying Firebase token:', err);
+        return res.status(500).json({ error: 'Error verifying Firebase token' });
+    }
+});
+
 // Login
 router.post("/login", async (req, res) => {
     
@@ -135,8 +180,10 @@ router.post("/login", async (req, res) => {
     const request = "SELECT * FROM users WHERE USER_NAME = ?";
     const results = await asyncDatabaseQuery(request, values);
     
+    console.log(results);
+
     // Check that the password passed to this endpoint matches the password found from the query.
-    if (values[1] == results[0].PASSWORD) {
+   /* if (values[1] == results[0].PASSWORD) {
 
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
@@ -175,11 +222,30 @@ router.post("/login", async (req, res) => {
     }
     
     // Here we connect firebase to react and mysql database
+    const custonToken = await admin.auth().createCustomToken(user.USER_NAME);
+    
     return res.status(200).json({
-        "passwordVerified": true,
+        "loginComplete": true,
         "phoneNumber": user.PHONE_NUMBER,
         "message": "PASSWORD_VALID_PROCEED_TO_FIRERBASE_2FA"
     )};
+});
+*/
+
+    if (results.length > 0 && values[1] === results[0].PASSWORD) {
+        const token = createJWTToken(results[0]);
+        res.cookie("token", token, { secure: true, sameSite: "strict" });
+
+        return res.status(200).json({
+            loginComplete: true,
+            message: "LOGIN_COMPLETE"
+        });
+    } else {
+        return res.status(200).json({
+            loginComplete: false,
+            message: "INCORRECT_PASSWORD"
+        });
+    }
 });
 
 // Add user
