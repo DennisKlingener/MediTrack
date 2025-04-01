@@ -30,26 +30,6 @@ async function asyncDatabaseQuery(request, values) {
     }
 }
 
-function createJWTToken(user) {
-
-    const payload = {
-        userId: user.id,
-        firstName: user.FIRST_NAME,
-        lastName: user.LAST_NAME,
-        userName: user.USER_NAME,
-        password: user.PASSWORD,
-        phoneNumber: user.PHONE_NUMBER,
-        email: user.EMAIL,
-        timeZone: user.TIMEZONE
-    }
-
-    // const secretKey = "CHANGE_THIS_KEY";
-
-    // const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
-
-    return payload;
-}
-
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
 // SELECT * FROM users WHERE <parameters>;
@@ -165,10 +145,6 @@ router.post("/login", async (req, res) => {
         // Need to init a jwt token with the users information and return a success statment back the frontend here. 
         console.log("passwords match!");
 
-        // const token = createJWTToken(results[0]);
-
-
-
         const token = jwt.sign(
             {userId: results[0].id,
             firstName: results[0].FIRST_NAME,
@@ -179,13 +155,14 @@ router.post("/login", async (req, res) => {
             email: results[0].EMAIL,
             timeZone: results[0].TIMEZONE }, 
             "CHANGE_THIS_KEY", 
-            {expiresIn: "2h"});
+            {expiresIn: "2h"}
+        );
 
         // Store the token in a http cookie.
         res.cookie("token", token, {
-            httpOnly: false,
-            secure: false,
-            sameSite: "lax"
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
         });
 
         return res.status(200).json({
