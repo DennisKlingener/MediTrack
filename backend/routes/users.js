@@ -13,7 +13,7 @@ router.use(express.json());
 const PORT = process.env.PORT || 5000; // Do we need this...
 
 // Initialize Firebase Admin (ensure you've added your service account file in the backend)
-const serviceAccount = require('../firebaseServiceAccountKey.json');
+const serviceAccount = require('backend/routes/firebaseServiceAccountKey.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
