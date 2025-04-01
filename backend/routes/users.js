@@ -161,7 +161,7 @@ router.post("/login", async (req, res) => {
         // Store the token in a http cookie.
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: "strict"
         });
 
