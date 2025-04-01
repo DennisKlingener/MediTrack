@@ -38,6 +38,30 @@ async function asyncDatabaseQuery(request, values) {
     }
 }
 
+// Function to create a JWT token
+function createJWTToken(user) {
+
+    const payload = {
+        userId: user.id,
+        firstName: user.FIRST_NAME,
+        lastName: user.LAST_NAME,
+        userName: user.USER_NAME,
+        password: user.PASSWORD,
+        phoneNumber: user.PHONE_NUMBER,
+        email: user.EMAIL,
+        timeZone: user.TIMEZONE
+    }
+
+
+    console.log("Here is the payload: ", payload);
+
+    const secretKey = "CHANGE_THIS_KEY";
+
+    const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
+
+    return token;
+}
+
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
 // SELECT * FROM users WHERE <parameters>;
@@ -127,6 +151,8 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     )};
 */
+
+// Verify phone number with Firebase authentication
 router.post("/verify-phone", async (req, res) => {
     const { idToken, phoneNumber } = req.body;
 
@@ -170,7 +196,7 @@ router.post("/login", async (req, res) => {
     let requiredFields = ["userName", "password"];
 
     // Ensure all data is present for user login and add values to the values array.
-    for (let i = 0; i < values.length; i++) {
+    /*for (let i = 0; i < values.length; i++) {
         if (!values[i]) {
             return res.status(500).json({error: `Login data ${requiredFields[i]} is missing`});
         }
@@ -181,6 +207,25 @@ router.post("/login", async (req, res) => {
     const results = await asyncDatabaseQuery(request, values);
     
     console.log(results);
+    */
+    
+    // Validate that both username and password are provided in the request
+    if (!userName || !password) {
+        return res.status(500).json({ error: "Login data missing" });
+    }
+
+    const request = "SELECT * FROM users WHERE USER_NAME = ?";
+    const results = await asyncDatabaseQuery(request, [userName]);
+   
+    // If no matching user is found, return a response indicating user does not exist
+    if (results.length === 0) {
+        return res.status(200).json({
+            loginComplete: false,
+            message: "USER_NOT_FOUND"
+        });
+    }
+
+    const user = result[0];
 
     // Check that the password passed to this endpoint matches the password found from the query.
    /* if (values[1] == results[0].PASSWORD) {
@@ -229,10 +274,11 @@ router.post("/login", async (req, res) => {
         "phoneNumber": user.PHONE_NUMBER,
         "message": "PASSWORD_VALID_PROCEED_TO_FIRERBASE_2FA"
     )};
-});
-*/
+});*/
 
-    if (results.length > 0 && values[1] === results[0].PASSWORD) {
+    const passwordMatch = await bcrypt.compatre(password, user.PASSWORD);
+
+   /* if (results.length > 0 && values[1] === results[0].PASSWORD) {
         const token = createJWTToken(results[0]);
         res.cookie("token", token, { secure: true, sameSite: "strict" });
 
@@ -245,6 +291,24 @@ router.post("/login", async (req, res) => {
             loginComplete: false,
             message: "INCORRECT_PASSWORD"
         });
+    }*/
+if (!passwordMatch) {
+        return res.status(401).json({ loginComplete: false, message: "INCORRECT_PASSWORD" });
+    }
+
+    // **Step 2: Generate a Firebase Custom Token for 2FA**
+    try {
+        const firebaseToken = await admin.auth().createCustomToken(user.USER_NAME);
+
+        return res.status(200).json({
+            loginComplete: true,
+            message: "PASSWORD_VALID_PROCEED_TO_FIREBASE_2FA",
+            phoneNumber: user.PHONE_NUMBER,
+            firebaseToken,
+        });
+    } catch (err) {
+        console.error("Error creating Firebase custom token:", err);
+        return res.status(500).json({ error: "Error generating Firebase token" });
     }
 });
 
