@@ -198,18 +198,18 @@ function ProfilePage() {
                                             });
                                         }} 
                                     >
-                                        <option selected>1:00</option>
-                                        <option value="1">2:00</option>
-                                        <option value="2">3:00</option>
-                                        <option value="3">4:00</option>
-                                        <option selected>5:00</option>
-                                        <option value="1">6:00</option>
-                                        <option value="2">7:00</option>
-                                        <option value="3">8:00</option>
-                                        <option selected>9:00</option>
-                                        <option value="1">10:00</option>
-                                        <option value="2">11:00</option>
-                                        <option value="3">12:00</option>
+                                        <option>1:00</option>
+                                        <option>2:00</option>
+                                        <option>3:00</option>
+                                        <option>4:00</option>
+                                        <option>5:00</option>
+                                        <option>6:00</option>
+                                        <option>7:00</option>
+                                        <option>8:00</option>
+                                        <option>9:00</option>
+                                        <option>10:00</option>
+                                        <option>11:00</option>
+                                        <option>12:00</option>
                                     </select>
                                 </div>
                             
