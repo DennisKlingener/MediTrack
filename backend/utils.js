@@ -73,12 +73,13 @@ function convertUTCToTimeZone(UTCTime, timeZone, isAM) {
 function convertTimeToUTC(time, timeZone, isAM) {
 
     const isDayLightSavings = isDST();
-    
+    let newTime;
+
     // Times 10, 11, or 12
     if (time.length > 4) {
-        let newTime = time.substring(0, 1);
+        newTime = time.substring(0, 1);
     } else {
-        let newTime = time.substring(0, 0);
+        newTime = time.substring(0, 0);
     }
 
     let timeNumericalValue = parseInt(newTime, 10);
