@@ -7,6 +7,8 @@ function ProfilePage() {
     // Upon page load, make a query for all the users medis using the id from the jwt token
     // dynamically init the table with all the users data.
 
+    const [medData, setMedData] = useState([]);
+
 
     // Runs immediatly after the page is loaded.
     useEffect(async () => {
@@ -20,26 +22,10 @@ function ProfilePage() {
         });
 
         const result = await response.json();
-        console.log("Here is result: ", result);
+        setMedData(result);
     }, []);
 
-    // const loadTab = async () => {
-
-    //     // Call the apiendppint.
-    //     const apiURL = "http://159.203.164.160:5000/routes/medications/usermeds";
-
-    //     const response = await fetch(apiURL, {
-    //         method: "GET",
-    //         credentials: "include", // Required to send cookies
-    //     });
-
-    //     const result = response.json();
-    //     console.log("Here is result: ", result);
-
-    // }
-
-
-
+    
 
 
     return (
@@ -50,8 +36,6 @@ function ProfilePage() {
 
                 <div id='userPanel' className="col-auto text-center">
 
-                    {/* <button onClick={loadTab} >Load the table</button> */}
-
                     <table class="table">
                         <thead>
                             <tr>
@@ -61,23 +45,20 @@ function ProfilePage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* To be dynamically filled. */}
+                            {/* Dynamically allocated table*/}
+                            { medData.map(
+                                // for Each row in medData
+                                (row) => (
+                                    <tr>
+                                        <td>row[1]</td>
+                                        <td>row[8] + {row[9] ? "AM" : "PM"}</td>
+                                        <td>row[2]</td>
+                                    </tr>
+                                ))
+                            }
                         </tbody>
                     </table>
-                    
-
-                    
-
-
-
-
-
                 </div>
-
-
-
-
-
             </div>
 
         </div>
