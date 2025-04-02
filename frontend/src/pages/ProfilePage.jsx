@@ -16,7 +16,7 @@ function ProfilePage() {
         medName: "",
         currentQuantity: "",
         timeToTakeAt: "",
-        isTimeAm: "",
+        isTimeAM: "",
         amountToTake: "",
         refillQuantity: "",
     });
@@ -46,7 +46,7 @@ function ProfilePage() {
             amountToTake: newMedFormData.amountToTake,
             refillQuantity: newMedFormData.refillQuantity,
             timeToTakeAt: newMedFormData.timeToTakeAt,
-            isTimeAm: newMedFormData.isTimeAm,
+            isTimeAM: newMedFormData.isTimeAM,
         };
 
         console.log("New Med Data:", data);
@@ -184,7 +184,6 @@ function ProfilePage() {
                                 </div>
 
                                 {/* Time To Take At */}
-                                
                                 <div className="form-group mt-2 mb-2">
                                     <label for="newMedTimeToTakeAtLabel">TimeToTakeAt</label>
                                     <select 
@@ -217,9 +216,9 @@ function ProfilePage() {
                                 <input 
                                     id="newMedAmCheck"
                                     className="form-check-input"
-                                    name='isTimeAm' 
+                                    name='isTimeAM' 
                                     type="checkbox" 
-                                    value={newMedFormData.isTimeAm} 
+                                    value={newMedFormData.isTimeAM} 
                                     onChange={(e) => {
                                         setNewMedFormData({
                                             ...newMedFormData,
