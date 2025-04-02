@@ -15,14 +15,14 @@ function modTime(time) {
 
 function convertTimeToString(time) {
     if (time > 9) {
-        time.toString();
+        time = time.toString();
         time = time + ":00:00";
     } else {
-        time.toString();
+        time = time.toString();
         time = "0" + time + ":00:00";
     }
     
-    return time.toString();
+    return time;
 }
 
 
