@@ -48,13 +48,13 @@ function ProfilePage() {
                             {/* Dynamically allocated table*/}
                             { medData.map(
                                 // for Each row in medData
-                                (row) => (row.map((curRow) => (
+                                (row) => ( 
                                     <tr>
-                                        <td>{curRow[1]}</td>
-                                        <td>{curRow[8] + curRow[9] ? "AM" : "PM"}</td>
-                                        <td>{curRow[2]}</td>
+                                        <td>{row.MED_NAME}</td>
+                                        <td>{row.TIME_TO_TAKE_AT + row.IS_TIME_AM ? "AM" : "PM"}</td>
+                                        <td>{row.CURRENT_QUANTITY}</td>
                                     </tr>
-                                ))))
+                                ))
                             }
                         </tbody>
                     </table>
