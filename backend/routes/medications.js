@@ -132,17 +132,10 @@ router.post("/add", async (req, res) => {
           
     // Get the JSON package from the request. 
     const {medName, currentQuantity, amountToTake, refillQuantity, timeToTakeAt, isTimeAM} = req.body;
-
-    // Init the values array and make sure all the needed values are present.
-    let values = [medName, currentQuantity, amountToTake, refillQuantity, timeToTakeAt, isTimeAM];
     let requiredFields = ["medName", "currentQuantity", "amountToTake", "refillQuantity", "timeToTakeAt", "isTimeAM"];
 
-    // Ensure all data is present for new medication and add values to the values array.
-    for (let i = 0; i < values.length; i++) {
-        if (!values[i]) {
-            return res.status(500).json({error: `New medication data ${requiredFields[i]} is missing`});
-        }
-    }
+    // Set the values array
+    let values = [medName, currentQuantity, amountToTake, refillQuantity];
 
     // The currently logged in user will have entered the time to take at in their respectiove time zone, we must convert it to UTC before storing in the database.
     const token = req.cookies.token;
@@ -151,18 +144,24 @@ router.post("/add", async (req, res) => {
         return res.status(403).json({error: "No JWT token provided"});
     }
     
-    // Get the timezone from the jwt token, convert it, and overwrite the entered time in values. and get the user id
+    // Get the needed data from the jwt token.
     try {
         const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY"); // MAKE A BETTER KEY
-
-        const timeZone = decodedToken.timeZone;
-        const convertedTime = convertTimeToUTC(values[4], timeZone, values[5]);
-        values[6] = convertedTime;
-
         const userId = decodedToken.userId;
+        const timeZone = decodedToken.timeZone;
+        const convertedTime = convertTimeToUTC(timeToTakeAt, timeZone, isTimeAM);
+        values.push(convertedTime);
+        values.push(isTimeAM);
         values.push(userId);
     } catch (err) {
         return res.status(500).json({error: `Error reading from jwt token: ${err}`}); 
+    }
+
+    // Ensure all data is present for new medication and add values to the values array.
+    for (let i = 0; i < values.length; i++) {
+        if (!values[i]) {
+            return res.status(500).json({error: `New medication data ${requiredFields[i]} is missing`});
+        }
     }
 
     let request = "INSERT INTO medications (MED_NAME, CURRENT_QUANTITY, AMOUNT_TO_TAKE, REFILL_QUANTITY, TIME_TO_TAKE_AT, IS_TIME_AM, USER_ID) VALUES(?,?,?,?,?,?,?)";
