@@ -52,14 +52,12 @@
 - Make usernames in the database a unique entry
 - put asyncdatabasequery in utils so we can use it in medications and cronJobs without rewriting.
 - make login and signup separate files if we have time!
-- Need to pass the jwt to the profile page on successful login with cookies
 - Need to implement a way to check in the add medication endpoint if the med is taken at a specific time each day or at an interval.
     - We can use default values in the req.body extraction and then implement conditions.
 - need a secret key (gitlab secret) to secure and verify jwt tokens. Stretch goal, not needed.
 - Need to ensure the front end login has a controlled time zone drop down menu to match whats expected in the endpoints etc.
 - Need to place our api endpoints in our .env or a gitlab secret. These need to be secure.
 - Implement error messages in the UI for login and signup errors.
-- Need to add JWT authentication for webpages so someone cant jump to profile.
 - Convert from utc to timezone on front end profile page.
 
 ## Notes:
