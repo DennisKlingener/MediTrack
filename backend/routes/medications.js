@@ -156,12 +156,11 @@ router.post("/add", async (req, res) => {
         const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY"); // MAKE A BETTER KEY
 
         const timeZone = decodedToken.timeZone;
-        const convertedTime = convertTimeToUTC(values[6], timeZone); // NEED TO FORMAT TIME!
+        const convertedTime = convertTimeToUTC(values[4], timeZone, values[5]);
         values[6] = convertedTime;
 
         const userId = decodedToken.userId;
         values.push(userId);
-        
     } catch (err) {
         return res.status(500).json({error: `Error reading from jwt token: ${err}`}); 
     }

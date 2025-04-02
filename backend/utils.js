@@ -5,7 +5,30 @@ function isDST() {
     return Math.min(jan, jul) !== new Date().getTimezoneOffset();
 }
 
-function convertUTCToTimeZone(UTCTime, timeZone) {
+function modTime(time) {
+    if (time > 24) {
+        time = (time % 24);
+    }
+    
+    return time;
+}
+
+function convertTimeToString(time) {
+    if (time > 9) {
+    time.toString();
+    time = time + ":00:00";
+    } else {
+        time.toString();
+        time = "0" + time + ":00:00";
+    }
+    
+    return time;
+}
+
+
+
+
+function convertUTCToTimeZone(UTCTime, timeZone, isAM) {
 
     const isDayLightSavings = isDST();
 
@@ -36,7 +59,7 @@ function convertUTCToTimeZone(UTCTime, timeZone) {
             }
             return UTCTime - 9;
         case "HAWAII TIME":
-            return UTCTime -10;
+            return UTCTime + 10;
         case "SAMOA TIME":
             return - 11;
         case "CHAMORRO TIME":
@@ -47,45 +70,79 @@ function convertUTCToTimeZone(UTCTime, timeZone) {
     }
 }
 
-function convertTimeToUTC(time, timeZone) {
+function convertTimeToUTC(time, timeZone, isAM) {
 
     const isDayLightSavings = isDST();
+    
+    // Times 10, 11, or 12
+    if (time.length > 4) {
+        let newTime = time.substring(0, 1);
+    } else {
+        let newTime = time.substring(0, 0);
+    }
+
+    let timeNumericalValue = parseInt(newTime, 10);
+
+    // If time is PM, add 12.
+    if ( ((!isAM) && (timeNumericalValue != 12)) || ((isAM) && (timeNumericalValue == 12)) ) {
+        timeNumericalValue = timeNumericalValue + 12;
+    }
     
     switch(timeZone) {
         case "EASTERN TIME":
             if (isDayLightSavings) {
-                return time + 4;
+                timeNumericalValue + 4;
+            } else {
+                timeNumericalValue + 5;
             }
-            return time + 5;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "CENTRAL TIME":
             if (isDayLightSavings) {
-                return time + 5;
+                timeNumericalValue + 5;
+            } else {
+                timeNumericalValue + 6;
             }
-            return time + 6;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "MOUNTAIN TIME":
             if (isDayLightSavings) {
-                return time + 6;
+                timeNumericalValue + 6;
+            } else {
+                timeNumericalValue + 7;
             }
-            return time + 7;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "PACIFIC TIME":
             if (isDayLightSavings) {
-                return time + 7;
+                timeNumericalValue + 7;
+            } else {
+                timeNumericalValue + 8;
             }
-            return time + 8;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "ALASKA TIME":
             if (isDayLightSavings) {
-                return time + 8;
+                timeNumericalValue + 8;
+            } else {
+                timeNumericalValue + 9;
             }
-            return time + 9;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "HAWAII TIME":
-            return time -10;
+            timeNumericalValue - 10;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "SAMOA TIME":
-            return + 11;
+            timeNumericalValue + 11;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         case "CHAMORRO TIME":
-            return time - 10;
+            timeNumericalValue - 10;
+            timeNumericalValue = modTime(timeNumericalValue);
+            return convertTimeToString(timeNumericalValue);
         default:
             console.log("Invalid Timezone!");
-            return time;
     }
 }
 
