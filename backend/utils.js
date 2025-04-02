@@ -92,59 +92,59 @@ function convertTimeToUTC(time, timeZone, isAM) {
     switch(timeZone) {
         case "EASTERN TIME":
             if (isDayLightSavings) {
-                timeNumericalValue + 4;
+                timeNumericalValue += 4;
             } else {
-                timeNumericalValue + 5;
+                timeNumericalValue += 5;
             }
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "CENTRAL TIME":
             if (isDayLightSavings) {
-                timeNumericalValue + 5;
+                timeNumericalValue += 5;
             } else {
-                timeNumericalValue + 6;
+                timeNumericalValue += 6;
             }
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "MOUNTAIN TIME":
             if (isDayLightSavings) {
-                timeNumericalValue + 6;
+                timeNumericalValue += 6;
             } else {
-                timeNumericalValue + 7;
+                timeNumericalValue += 7;
             }
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "PACIFIC TIME":
             if (isDayLightSavings) {
-                timeNumericalValue + 7;
+                timeNumericalValue += 7;
             } else {
-                timeNumericalValue + 8;
+                timeNumericalValue += 8;
             }
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "ALASKA TIME":
             if (isDayLightSavings) {
-                timeNumericalValue + 8;
+                timeNumericalValue += 8;
             } else {
-                timeNumericalValue + 9;
+                timeNumericalValue += 9;
             }
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "HAWAII TIME":
-            timeNumericalValue - 10;
+            timeNumericalValue -= 10;
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "SAMOA TIME":
-            timeNumericalValue + 11;
+            timeNumericalValue += 11;
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         case "CHAMORRO TIME":
-            timeNumericalValue - 10;
+            timeNumericalValue -= 10;
             timeNumericalValue = modTime(timeNumericalValue);
             return convertTimeToString(timeNumericalValue);
         default:
             console.log("Invalid Timezone!");
     }
-}
+}   
 
 module.exports = {convertUTCToTimeZone, convertTimeToUTC};
