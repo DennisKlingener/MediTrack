@@ -128,61 +128,53 @@ router.get("/search", (req, res) => {
 });
 
 // Add
-router.post("/add", (req, res) => {
+router.post("/add", async (req, res) => {
+          
+    // Get the JSON package from the request. 
+    const {medName, currentQuantity, amountToTake, refillQuantity, timeToTakeAt, isTimeAM} = req.body;
 
-    // Get a connection
-    databasePool.getConnection((err,connection) => {
+    // Init the values array and make sure all the needed values are present.
+    let values = [medName, currentQuantity, amountToTake, refillQuantity, timeToTakeAt, isTimeAM];
+    let requiredFields = ["medName", "currentQuantity", "amountToTake", "refillQuantity", "timeToTakeAt", "isTimeAM"];
 
-        if (err) {
-            return res.status(500).json({error: "Database connection failure:" + err.message});
+    // Ensure all data is present for new medication and add values to the values array.
+    for (let i = 0; i < values.length; i++) {
+        if (!values[i]) {
+            return res.status(500).json({error: `New medication data ${requiredFields[i]} is missing`});
         }
-        
-        // Get the JSON package from the request. 
-        const {medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId} = req.body;
+    }
+
+    // The currently logged in user will have entered the time to take at in their respectiove time zone, we must convert it to UTC before storing in the database.
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(403).json({error: "No JWT token provided"});
+    }
     
-        // Init the values array and make sure all the needed values are present.
-        let values = [medName, currentQuantity, amountToTake, refillQuantity, dateStarted, takeInterval, timeToTakeAt, isTimeAM, userId];
-        let requiredFields = ["medName", "currentQuantity", "amountToTake", "refillQuantity", "dateStarted", "takeInterval", "timeToTakeAt", "isTimeAM", "userId"];
+    // Get the timezone from the jwt token, convert it, and overwrite the entered time in values. and get the user id
+    try {
+        const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY"); // MAKE A BETTER KEY
 
-        // Ensure all data is present for new medication and add values to the values array.
-        for (let i = 0; i < values.length; i++) {
-            if (!values[i]) {
-                return res.status(500).json({error: `New medication data ${requiredFields[i]} is missing`});
-            }
-        }
+        const timeZone = decodedToken.timeZone;
+        const convertedTime = convertTimeToUTC(values[6], timeZone); // NEED TO FORMAT TIME!
+        values[6] = convertedTime;
 
+        const userId = decodedToken.userId;
+        values.push(userId);
         
-        // The currently logged in user will have entered the time to take at in their respectiove time zone, we must convert it to UTC before storing in the database.
-        const token = req.cookies.token;
+    } catch (err) {
+        return res.status(500).json({error: `Error reading from jwt token: ${err}`}); 
+    }
 
-        if (!token) {
-            return res.status(403).json({error: "No JWT token provided"});
-        }  
+    let request = "INSERT INTO medications (MED_NAME, CURRENT_QUANTITY, AMOUNT_TO_TAKE, REFILL_QUANTITY, TIME_TO_TAKE_AT, IS_TIME_AM, USER_ID) VALUES(?,?,?,?,?,?,?)";
+    
+    const results = await asyncDatabaseQuery(request, values);
 
-        // Get the timezone from the jwt token, convert it, and overwrite the entered time in values.
-        try {
-            const decodedToken = jwt.verify(token); // NEED A KNOWN SECRET KEY HERE TO VERIFY JWT TOKEN.
-            const timeZone = decodedToken.timeZone;
-            const convertedTime = convertTimeToUTC(values[6], timeZone);
-            values[6] = convertedTime;
-        } catch (err) {
-            return res.status(500).json({error: `Error reading from jwt token: ${err}`}); 
-        }
+    console.log("Here is results in the try:", results);
 
-        let request = "INSERT INTO medications (MED_NAME, CURRENT_QUANTITY, AMOUNT_TO_TAKE, REFILL_QUANTITY, DATE_STARTED, TAKE_INTERVAL, TIME_TO_TAKE_AT, IS_TIME_AM, USER_ID) VALUES(?,?,?,?,?,?,?,?,?)";
+    // Return the results to the front end.
+    return res.json(results);
 
-        connection.query(request, values, (err, results) => {
-
-            connection.release();
-
-            if (err) {
-                return res.status(500).json({error: err.message});
-            }
-
-            res.json(results);
-
-        });
-    });
 });
 
 // Delete
