@@ -60,6 +60,7 @@
 - Implement error messages in the UI for login and signup errors.
 - Convert from utc to timezone on front end profile page.
 - There will be errors when taking more pills than you have left.
+- Fix the add medication api its kinda bad. (checking that all the data is present)
 
 ## Notes:
 - Wont be able to test the jwt token stuff until the signup page is done and functional.
