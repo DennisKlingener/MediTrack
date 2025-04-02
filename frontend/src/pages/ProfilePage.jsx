@@ -50,9 +50,9 @@ function ProfilePage() {
                                 // for Each row in medData
                                 (row) => (
                                     <tr>
-                                        <td>row[1]</td>
-                                        <td>row[8] + {row[9] ? "AM" : "PM"}</td>
-                                        <td>row[2]</td>
+                                        <td>{row[1]}</td>
+                                        <td>{row[8] + row[9] ? "AM" : "PM"}</td>
+                                        <td>{row[2]}</td>
                                     </tr>
                                 ))
                             }
