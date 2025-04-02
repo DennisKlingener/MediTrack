@@ -59,6 +59,7 @@
 - Need to place our api endpoints in our .env or a gitlab secret. These need to be secure.
 - Implement error messages in the UI for login and signup errors.
 - Convert from utc to timezone on front end profile page.
+- There will be errors when taking more pills than you have left.
 
 ## Notes:
 - Wont be able to test the jwt token stuff until the signup page is done and functional.
