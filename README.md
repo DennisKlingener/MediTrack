@@ -61,6 +61,8 @@
 - Convert from utc to timezone on front end profile page.
 - There will be errors when taking more pills than you have left.
 - Fix the add medication api its kinda bad. (checking that all the data is present)
+- Make it so when you add a new med it pops up without refreshing the screen.
+
 
 ## Notes:
 - Wont be able to test the jwt token stuff until the signup page is done and functional.
