@@ -51,7 +51,7 @@ function ProfilePage() {
             amountToTake: newMedFormData.amountToTake,
             refillQuantity: newMedFormData.refillQuantity,
             timeToTakeAt: newMedFormData.timeToTakeAt,
-            isTimeAM: (isAmRef.current.checked ? 1 : 0),
+            isTimeAM: (isAmRef.current.checked ? "1" : "0"),
         };
 
 
