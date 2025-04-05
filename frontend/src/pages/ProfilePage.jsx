@@ -80,7 +80,19 @@ function ProfilePage() {
         // ADD SUCCESS NOTIF
     }
 
-    const deleteMed = async (medIndexToDelete) => {
+    const deleteMed = async (medNameToDelete) => {
+
+        // Get the API route
+        apiURL = `http://159.203.164.160:5000/routes/medications/delete/${encodeURIComponent(medNameToDelete)}`;
+
+        // make the call.
+        const response = await fetch(apiURL, {
+            method: "DELETE",
+            credentials: "include",
+        });
+
+        const result = await response.json();
+        console.log("Delete med res: ", result);
     }
 
     const handleRowClick = (rowIndex) => {
@@ -295,28 +307,19 @@ function ProfilePage() {
 
                             <div className="row">
 
-                                <div className="col-auto">
-
+                                <div className="col-auto text-center">
                                     <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
                                     <h2>Amount to take: {medData[medInfoToDisplay]?.AMOUNT_TO_TAKE}</h2>
-
                                 </div>
 
-                                <div className="col-auto">
-
+                                <div className="col-auto text-center">
                                     <h2>Refill amount: {medData[medInfoToDisplay]?.REFILL_QUANTITY}</h2>
                                     <h2>Time to take at: {medData[medInfoToDisplay]?.TIME_TO_TAKE_AT}</h2>
-
                                 </div>
-
-
-
-
                             </div>
 
-
-
-
+                            <button onClick={switchViewMode("tableView")}>Back</button>
+                            <button onClick={deleteMed(medData[medInfoToDisplay]?.MED_NAME)}>Delete</button>
 
                         </div>
 
