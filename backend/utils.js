@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 // Checks if we are in daylight savings.
 function isDST() {
     const jan = new Date(new Date().getFullYear(), 0, 1).getTimezoneOffset();
@@ -27,7 +29,8 @@ function convertTimeToString(time) {
 
 function convertUTCToTimeZone(UTCTime, timeZone) {
 
-    const isDayLightSavings = isDST();
+    const isDayLightSavings = moment().isDST();
+    
     console.log("here is isDLV:", isDayLightSavings);
     let newTime;
 
@@ -104,7 +107,7 @@ function convertUTCToTimeZone(UTCTime, timeZone) {
 
 function convertTimeToUTC(time, timeZone, isAM) {
 
-    const isDayLightSavings = isDST();
+    const isDayLightSavings = moment().isDST();
     let newTime;
 
     // Times 10, 11, or 12
