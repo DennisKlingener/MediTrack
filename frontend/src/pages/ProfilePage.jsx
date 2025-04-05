@@ -20,7 +20,7 @@ function ProfilePage() {
         amountToTake: "",
         refillQuantity: "",
     });
-
+    const isAmRef = useState(null);
 
     // Controls the div when a med in the table is selected.
     const [medInfoView, setMedInfoView] = useState(false);
@@ -51,7 +51,7 @@ function ProfilePage() {
             amountToTake: newMedFormData.amountToTake,
             refillQuantity: newMedFormData.refillQuantity,
             timeToTakeAt: newMedFormData.timeToTakeAt,
-            isTimeAM: newMedFormData.isTimeAM,
+            isTimeAM: (isAmRef.current.checked ? 1 : 0),
         };
         
         // Call the endpoint
@@ -99,7 +99,6 @@ function ProfilePage() {
         setMedInfoToDisplay(rowIndex);
         switchViewMode("medInfoView");
     }
-
 
     const switchViewMode = (mode) => {
         switch (mode) {
@@ -257,13 +256,7 @@ function ProfilePage() {
                                     name='isTimeAM' 
                                     type="checkbox" 
                                     value={newMedFormData.isTimeAM} 
-                                    onChange={(e) => {
-                                        setNewMedFormData({
-                                            ...newMedFormData,
-                                            [e.target.name]: e.target.checked ? 1 : 0
-                                        });
-                                        console.log("Here is isAM:", newMedFormData.isTimeAM);
-                                    }}
+                                    ref={isAmRef}
                                 />
                                 <label class="form-check-label" for="flexCheckDefault">AM</label>
 
