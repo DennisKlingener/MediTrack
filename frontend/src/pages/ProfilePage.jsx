@@ -53,6 +53,10 @@ function ProfilePage() {
             timeToTakeAt: newMedFormData.timeToTakeAt,
             isTimeAM: (isAmRef.current.checked ? 1 : 0),
         };
+
+
+        console.log("Here is new med data: ", data);
+
         
         // Call the endpoint
         try {
