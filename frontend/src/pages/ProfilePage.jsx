@@ -86,6 +86,7 @@ function ProfilePage() {
     const handleRowClick = (row) => {
 
         // We can use the medData useState to store the row
+        setMedData(null);
         setMedData(row);
 
         console.log("here is medData", medData);
@@ -127,7 +128,7 @@ function ProfilePage() {
                             <button onClick={() => switchViewMode("newMedView")}>+</button>
                         </div>
 
-                        <table className="table">
+                        <table className="table table-hover">
                             <thead>
                                 <tr>
                                 <th scope="col">Medication</th>
