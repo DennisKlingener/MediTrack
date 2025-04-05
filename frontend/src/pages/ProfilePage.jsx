@@ -87,7 +87,8 @@ function ProfilePage() {
 
         setMedInfoToDisplay(rowIndex);
 
-  
+        console.log("here is rowIndex: ", rowIndex);
+        console.log("here is medinfotoDisplay: ", medInfoToDisplay);
         console.log("here is medData", medData);
 
         switchViewMode("medInfoView");
@@ -297,8 +298,7 @@ function ProfilePage() {
                         <div className="col-auto">
 
                             {/* Current quan, name, amount to take, refill, time to take at+isam */}
-                            <h1>{medData[medInfoToDisplay].MED_NAME}</h1>
-                            <h2>{medData[medInfoToDisplay][1]}</h2>
+                            <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
 
 
                         </div>
