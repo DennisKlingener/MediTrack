@@ -262,6 +262,7 @@ function ProfilePage() {
                                             ...newMedFormData,
                                             [e.target.name]: e.target.checked ? 1 : 0
                                         });
+                                        console.log("Here is isAM:", newMedFormData.isTimeAM);
                                     }}
                                 />
                                 <label class="form-check-label" for="flexCheckDefault">AM</label>
