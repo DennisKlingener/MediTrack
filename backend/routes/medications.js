@@ -207,7 +207,6 @@ router.delete("/delete/:medName", async (req,res) => {
 // Update
 // Need this if we want users to be able to edit med info after entering it.
 
-
 // Get all medications for a specific user using JWT token
 router.get("/usermeds", async (req, res) => {
 
@@ -247,8 +246,5 @@ router.get("/usermeds", async (req, res) => {
         return res.status(403).json({ message: "Invalid token" });
     }
 });
-
-
-
 
 module.exports = router;
