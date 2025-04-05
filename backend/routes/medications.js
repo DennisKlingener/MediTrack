@@ -141,7 +141,7 @@ router.post("/add", async (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.status(403).json({error: "No JWT token provided"});
+        return res.status(403).json({error: "No JWT token found"});
     }
     
     // Get the needed data from the jwt token.
@@ -176,36 +176,32 @@ router.post("/add", async (req, res) => {
 });
 
 // Delete
-router.delete("/delete/:userId/:medName", (req,res) => {
+router.delete("/delete/:medName", async (req,res) => {
 
-    databasePool.getConnection((err, connection) => {
+    let userId;
+    let medName = req.params.medName;
 
-        if (err) {
-            return res.status(500).json({error: "Database connection failure:" + err.message});
-        }
+    // get the users token
+    const token = req.cookies.token;
 
-        let userId = req.params.userId;
-        let medName = req.params.medName;
-        let request = "DELETE FROM medications WHERE USER_ID = ? AND MED_NAME = ?";
+    if (!token) {
+        return res.status(403).json({error: "No JWT token found"});
+    }
 
-        connection.query(request, [userId, medName], (err, results) => {
+    try {
+        const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY");
+        userId = decodedToken.userId;
+    } catch (err) {
+        return res.status(500).json({error: `Error reading from jwt token: ${err}`});
+    }
 
-            connection.release();
+    let request = "DELETE FROM medications WHERE USER_ID = ? AND MED_NAME = ?";
 
-            if (err) {
-                return res.status(500).json({error: err.message});
-            }
+    const results = await asyncDatabaseQuery(request, [userId, medName]);
 
-            if (results.affectedRows === 0) {
-                return res.status(404).json({error: `Medication with USER_ID:${userId} and MED_NAME:${medName} not found`});
-            }
-
-            res.json({
-                message: `Medication with USER_ID:${userId} and MED_NAME:${medName} deleted successfully`,
-                deletedRows: results.affectedRows
-            });
-        }); 
-    });
+    // Return the results to the front end.
+    return res.json(results);
+    
 });
 
 // Update
