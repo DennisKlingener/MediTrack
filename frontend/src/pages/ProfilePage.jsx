@@ -16,7 +16,7 @@ function ProfilePage() {
         medName: "",
         currentQuantity: "",
         timeToTakeAt: "",
-        isTimeAM: 0,
+        isTimeAM: "",
         amountToTake: "",
         refillQuantity: "",
     });
