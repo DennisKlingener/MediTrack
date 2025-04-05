@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-const {convertUTCToTimeZone, convertTimeToUTC} = require("../../../backend/utils");
 import '../styles/ProfilePage.css'
 
 function ProfilePage() {
@@ -137,7 +136,7 @@ function ProfilePage() {
                                     (row, rowIndex) => ( 
                                         <tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
                                             <td>{row.MED_NAME}</td>
-                                            <td>{convertUTCToTimeZone(row.TIME_TO_TAKE_AT) + (row.IS_TIME_AM ? "AM" : "PM")}</td>
+                                            <td>{row.TIME_TO_TAKE_AT + (row.IS_TIME_AM ? "AM" : "PM")}</td>
                                             <td>{row.CURRENT_QUANTITY}</td>
                                         </tr>
                                     ))
