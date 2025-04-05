@@ -1,4 +1,6 @@
 const cron = require("node-cron");
+const nodemailer = require('nodemailer');
+require("dotenv").config();
 const databasePool = require("./databaseConnection");
 
 // NOTE: FOR RIGHT NOW WE ARE RESTRICTED TO EVEN HOUR ONLY TIME TO TAKE MEDS. IE: 9:00, 3:00, 4:00 OR EVERY N HOURS. 
@@ -23,21 +25,12 @@ async function asyncDatabaseQuery(request, values) {
     }
 }
 
-// Checks all entries that have a TIME_TO_TAKE_VALUE.
-cron.schedule("0 * * * *", async () => {
-
-    // Get all the entires whos time to take is equal to the current time.
-
-    console.log("entering cron job!");
-
-
+function getAndConfigureTime() {
+    
     // Get the current time.
     const currentTime = new Date();
     let currentHour = currentTime.getHours();
     let isAM = false;
-
-    console.log("Here is current time:", currentTime);
-    console.log("here is current hour:", currentHour);
 
     // Check if AM or PM and mod if needed.
     if (currentHour <= 11) {
@@ -50,33 +43,23 @@ cron.schedule("0 * * * *", async () => {
         currentHour = (currentHour % 12);
     }
 
-    console.log("here is current hour after mod:", currentHour);
+    return [currentHour, isAM];
+}
+
+
+// Update all the values for medications who time to take is the current hour
+cron.schedule("0 * * * *", async () => {
+
+    const timeInfo = getAndConfigureTime();
 
     // Query for all table entries whos time to take matches the current hour.
     const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
-    let values = [(currentHour > 9) ? `${currentHour}:00:00` : `0${currentHour}:00:00`, (isAM) ? 1 : 0];
+    let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`, (timeInfo[1]) ? 1 : 0];
 
     console.log("here is values:", values);
 
     // async query. array of medications needed to be taken 
     const results = await asyncDatabaseQuery(selectRequest, values);
-
-    // AT THIS POINT WE WOULD NEED TO IMPLEMENT A METHOD THAT GETS THE PHONE NUMBER OF THE USERS IN THE RETURNED RESUSLTS AND SEND THEM A TEXT MESSAGE!!!!
-
-
-
-
-
-
-
-
-
-    //update phone numbers in database format +15555555555
-        //add +1 take away any dashes, spaces, or parenthesis
-    //if the user does not have phone number listed, skip sending the message
-    //if the user does not have a valid phone number, skip sending message 
-
-
 
     // Make allthe neccesary updates to the returned results.
     const updateRequest = "UPDATE medications SET CURRENT_QUANTITY = ? WHERE USER_ID = ? AND MED_NAME = ?";
@@ -122,6 +105,55 @@ cron.schedule("0 * * * *", async () => {
     }
 });
 
-// cron to check time interval
+// Send emails to all the users that have a medication to take at the current hour.
+cron.schedule("* * * * *", async () => {
+
+    const timeInfo = getAndConfigureTime();
+
+    // Query for all table entries whos time to take matches the current hour.
+    const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
+    let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`, (timeInfo[1]) ? 1 : 0];
+
+    // async query. array of medications needed to be taken 
+    const results = await asyncDatabaseQuery(selectRequest, values);
+
+    // Get the users thatneed t notified from the uiserid in the medications returned.
+    for (let row of results) {
+
+        // Set the request
+        const request = "SELECT * FROM users WHERE id = ?";
+        let userId = row.USER_ID;
+
+        // Make a request.
+        const results = await asyncDatabaseQuery(request, [userId]);
+
+        // Get the users email
+        let userEmail = results[0].EMAIL;
+
+        // Send an email tot he user    
+        const emailConnection = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "meditrackreminder@gmail.com",
+                pass: process.env.EMAIL_PASSWORD,
+            }
+        });
+
+        emailConnection.sendMail({
+            from: "meditrackreminder@gmail.com",
+            to: userEmail,
+            subject: "MediTrack Reminder",
+            text: "This is a reminder to take your meds!"
+        }, (error, info) => {
+            if (error) {
+              console.error('Error sending email:', error);
+            } else {
+              console.log('Email sent:', info.response);
+            }
+        });
+    }
+});
+
+
 
 // cron to check for refills needed soon.
