@@ -238,7 +238,11 @@ router.get("/usermeds", async (req, res) => {
         // Make the query for all the users meds by id
         const results = await asyncDatabaseQuery(request, values);
 
-        console.log("Here is results in the try:", results);
+        // Need to convert the time before we pass it to the front end
+        for (let row =  0; row < results.length; row++) {
+            let convertedTime = convertUTCToTimeZone(results[row].TIME_TO_TAKE_AT, decodedToken.timeZone);
+            results[row].TIME_TO_TAKE_AT = convertedTime;
+        }
 
         // Return the results to the front end.
         return res.json(results);

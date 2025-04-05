@@ -25,49 +25,80 @@ function convertTimeToString(time) {
     return formattedTimeString;
 }
 
-
-
-
-function convertUTCToTimeZone(UTCTime, timeZone, isAM) {
+function convertUTCToTimeZone(UTCTime, timeZone) {
 
     const isDayLightSavings = isDST();
+    let newTime;
+
+    // Times 10, 11, or 12
+    if (UTCTime.charAt(0) != '0') {
+        newTime = UTCTime.substring(0, 2);
+    } else {
+        newTime = UTCTime.charAt(1);
+    }
+
+    let timeNumericalValue = parseInt(newTime, 10);
 
     switch(timeZone) {
         case "EASTERN TIME":
             if (isDayLightSavings) {
-                return UTCTime - 4;
+                timeNumericalValue -= 4;
+            } else {
+                timeNumericalValue -= 5;
             }
-            return UTCTime - 5;
+            break;
         case "CENTRAL TIME":
             if (isDayLightSavings) {
-                return UTCTime - 5;
+                timeNumericalValue -= 5;
+            } else {
+                timeNumericalValue -= 6;
             }
-            return UTCTime - 6;
+            break;
         case "MOUNTAIN TIME":
             if (isDayLightSavings) {
-                return UTCTime - 6;
+                timeNumericalValue -= 6;
+            } else {
+                timeNumericalValue -= 7;
             }
-            return UTCTime - 7;
+            break;
         case "PACIFIC TIME":
             if (isDayLightSavings) {
-                return UTCTime - 7;
+                timeNumericalValue -= 7;
+            } else {
+                timeNumericalValue -= 8;
             }
-            return UTCTime - 8;
+            break;
         case "ALASKA TIME":
             if (isDayLightSavings) {
-                return UTCTime - 8;
+                timeNumericalValue -= 8;
+            } else {
+                timeNumericalValue -= 9;
             }
-            return UTCTime - 9;
+            break;
         case "HAWAII TIME":
-            return UTCTime + 10;
+            timeNumericalValue += 10;
+            break;
         case "SAMOA TIME":
-            return - 11;
+            timeNumericalValue -= 11;
+            break;
         case "CHAMORRO TIME":
-            return UTCTime + 10;
+            timeNumericalValue += 10;
+            break;
         default:
             console.log("Invalid Timezone!");
             return UTCTime;
     }
+
+    if (timeNumericalValue > 12) {
+        timeNumericalValue = (timeNumericalValue % 12);
+    } else if (timeNumericalValue < 0) {
+        timeNumericalValue *= -1;
+        timeNumericalValue = (timeNumericalValue >= 12) ? (24 - timeNumericalValue) : (24 - timeNumericalValue) - 12;
+    } else if (timeNumericalValue == 0) {
+        timeNumericalValue = 12;
+    }
+
+    return convertTimeToString(timeNumericalValue);
 }
 
 function convertTimeToUTC(time, timeZone, isAM) {
@@ -96,55 +127,50 @@ function convertTimeToUTC(time, timeZone, isAM) {
             } else {
                 timeNumericalValue += 5;
             }
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "CENTRAL TIME":
             if (isDayLightSavings) {
                 timeNumericalValue += 5;
             } else {
                 timeNumericalValue += 6;
             }
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "MOUNTAIN TIME":
             if (isDayLightSavings) {
                 timeNumericalValue += 6;
             } else {
                 timeNumericalValue += 7;
             }
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "PACIFIC TIME":
             if (isDayLightSavings) {
                 timeNumericalValue += 7;
             } else {
                 timeNumericalValue += 8;
             }
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "ALASKA TIME":
             if (isDayLightSavings) {
                 timeNumericalValue += 8;
             } else {
                 timeNumericalValue += 9;
             }
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "HAWAII TIME":
             timeNumericalValue -= 10;
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "SAMOA TIME":
             timeNumericalValue += 11;
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         case "CHAMORRO TIME":
             timeNumericalValue -= 10;
-            timeNumericalValue = modTime(timeNumericalValue);
-            return convertTimeToString(timeNumericalValue);
+            break;
         default:
             console.log("Invalid Timezone!");
     }
+
+    timeNumericalValue = modTime(timeNumericalValue);
+    return convertTimeToString(timeNumericalValue);
 }   
 
 module.exports = {convertUTCToTimeZone, convertTimeToUTC};
