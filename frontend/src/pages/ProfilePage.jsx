@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+const {convertUTCToTimeZone, convertTimeToUTC} = require("../../../backend/utils");
 import '../styles/ProfilePage.css'
 
 function ProfilePage() {
@@ -84,15 +85,8 @@ function ProfilePage() {
     }
 
     const handleRowClick = (rowIndex) => {
-
         setMedInfoToDisplay(rowIndex);
-
-        console.log("here is rowIndex: ", rowIndex);
-        console.log("here is medinfotoDisplay: ", medInfoToDisplay);
-        console.log("here is medData", medData);
-
         switchViewMode("medInfoView");
-
     }
 
 
@@ -143,7 +137,7 @@ function ProfilePage() {
                                     (row, rowIndex) => ( 
                                         <tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
                                             <td>{row.MED_NAME}</td>
-                                            <td>{row.TIME_TO_TAKE_AT + (row.IS_TIME_AM ? "AM" : "PM")}</td>
+                                            <td>{convertUTCToTimeZone(row.TIME_TO_TAKE_AT) + (row.IS_TIME_AM ? "AM" : "PM")}</td>
                                             <td>{row.CURRENT_QUANTITY}</td>
                                         </tr>
                                     ))
@@ -297,8 +291,32 @@ function ProfilePage() {
                         
                         <div className="col-auto">
 
-                            {/* Current quan, name, amount to take, refill, time to take at+isam */}
+                            {/* Current quan, amount to take, refill, time to take at+isam */}
                             <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
+
+                            <div className="row">
+
+                                <div className="col-auto">
+
+                                    <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
+                                    <h2>Amount to take: {medData[medInfoToDisplay]?.AMOUNT_TO_TAKE}</h2>
+
+                                </div>
+
+                                <div className="col-auto">
+
+                                    <h2>Refill amount: {medData[medInfoToDisplay]?.REFILL_QUANTITY}</h2>
+                                    <h2>Time to take at: {medData[medInfoToDisplay]?.TIME_TO_TAKE_AT}</h2>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+
 
 
                         </div>
