@@ -29,7 +29,7 @@ function convertTimeToString(time) {
 
 function convertUTCToTimeZone(UTCTime, timeZone) {
 
-    const isDayLightSavings = moment().isDST();
+    const isDayLightSavings = true;
     
     console.log("here is isDLV:", isDayLightSavings);
     let newTime;
@@ -107,7 +107,7 @@ function convertUTCToTimeZone(UTCTime, timeZone) {
 
 function convertTimeToUTC(time, timeZone, isAM) {
 
-    const isDayLightSavings = moment().isDST();
+    const isDayLightSavings = true;
     let newTime;
 
     // Times 10, 11, or 12

@@ -62,6 +62,7 @@
 - There will be errors when taking more pills than you have left.
 - Fix the add medication api its kinda bad. (checking that all the data is present)
 - Make it so when you add a new med it pops up without refreshing the screen.
+- Need a permenant solution to checking if we are in daylight savings or not.
 
 
 ## Notes:
