@@ -83,7 +83,7 @@ function ProfilePage() {
     const deleteMed = async (medNameToDelete) => {
 
         // Get the API route
-        apiURL = "http://159.203.164.160:5000/routes/medications/delete/" + medNameToDelete;
+        const apiURL = "http://159.203.164.160:5000/routes/medications/delete/" + medNameToDelete;
 
         console.log("here is apiURL:", apiURL);
 
