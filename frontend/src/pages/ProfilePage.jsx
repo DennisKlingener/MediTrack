@@ -53,9 +53,7 @@ function ProfilePage() {
             timeToTakeAt: newMedFormData.timeToTakeAt,
             isTimeAM: newMedFormData.isTimeAM,
         };
-
-        console.log("New Med Data:", data);
-
+        
         // Call the endpoint
         try {
 
@@ -297,14 +295,11 @@ function ProfilePage() {
                     </div>
                 }
 
-
                 { medInfoView && 
-                
                     <div id='medInfoView' className="col-auto text-center">
                         
                         <div className="col-auto">
 
-                            {/* Current quan, amount to take, refill, time to take at+isam */}
                             <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
 
                             <div className="row">
@@ -321,20 +316,15 @@ function ProfilePage() {
                             </div>
 
                             <button onClick={() => {switchViewMode("tableView")}}>Back</button>
-                            <button onClick={() => {deleteMed(medData[medInfoToDisplay]?.MED_NAME)}}>Delete</button>
-
+                            <button onClick={() => {
+                                deleteMed(medData[medInfoToDisplay]?.MED_NAME);
+                                switchViewMode("tabelView");
+                                }}
+                            >Delete</button>
                         </div>
 
                     </div>
-                
-                
                 }
-
-
-
-
-
-
                         
             </div>
         </div>
