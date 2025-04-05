@@ -83,7 +83,7 @@ function ProfilePage() {
     const deleteMed = async (medNameToDelete) => {
 
         // Get the API route
-        apiURL = `http://159.203.164.160:5000/routes/medications/delete/${encodeURIComponent(medNameToDelete)}`;
+        apiURL = `http://159.203.164.160:5000/routes/medications/delete/${medNameToDelete}`;
 
         // make the call.
         const response = await fetch(apiURL, {
@@ -318,8 +318,8 @@ function ProfilePage() {
                                 </div>
                             </div>
 
-                            <button onClick={switchViewMode("tableView")}>Back</button>
-                            <button onClick={deleteMed(medData[medInfoToDisplay]?.MED_NAME)}>Delete</button>
+                            <button onClick={() => {switchViewMode("tableView")}}>Back</button>
+                            <button onClick={() => {deleteMed(medData[medInfoToDisplay]?.MED_NAME)}}>Delete</button>
 
                         </div>
 
