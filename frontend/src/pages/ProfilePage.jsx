@@ -24,7 +24,7 @@ function ProfilePage() {
 
     // Controls the div when a med in the table is selected.
     const [medInfoView, setMedInfoView] = useState(false);
-
+    const [medInfoToDisplay, setMedInfoToDisplay] = useState(0);
 
     // Runs immediatly after the page is loaded.
     useEffect(() => {
@@ -83,12 +83,11 @@ function ProfilePage() {
     const deleteMed = async (medIndexToDelete) => {
     }
 
-    const handleRowClick = (row) => {
+    const handleRowClick = (rowIndex) => {
 
-        // We can use the medData useState to store the row
-        setMedData(null);
-        setMedData(row);
+        setMedInfoToDisplay(rowIndex);
 
+  
         console.log("here is medData", medData);
 
         switchViewMode("medInfoView");
@@ -141,7 +140,7 @@ function ProfilePage() {
                                 { medData.map(
                                     // for Each row in medData
                                     (row, rowIndex) => ( 
-                                        <tr key={rowIndex} onClick={() => handleRowClick(row)}>
+                                        <tr key={rowIndex} onClick={() => handleRowClick(rowIndex)}>
                                             <td>{row.MED_NAME}</td>
                                             <td>{row.TIME_TO_TAKE_AT + (row.IS_TIME_AM ? "AM" : "PM")}</td>
                                             <td>{row.CURRENT_QUANTITY}</td>
@@ -298,8 +297,8 @@ function ProfilePage() {
                         <div className="col-auto">
 
                             {/* Current quan, name, amount to take, refill, time to take at+isam */}
-                            <h1>{medData[0]}</h1>
-
+                            <h1>{medData[medInfoToDisplay].MED_NAME}</h1>
+                            <h2>{medData[medInfoToDisplay][1]}</h2>
 
 
                         </div>
