@@ -26,3 +26,13 @@
     width: 85vw;
     height: 80vh;
 }
+
+#medInfoView {
+    border-style: solid;
+    border-width: 5px;
+    border-color: royalblue;
+    border-radius: 20px;
+
+    width: 85vw;
+    height: 80vh;
+}

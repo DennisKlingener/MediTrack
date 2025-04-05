@@ -16,10 +16,15 @@ function ProfilePage() {
         medName: "",
         currentQuantity: "",
         timeToTakeAt: "",
-        isTimeAM: "0",
+        isTimeAM: 0,
         amountToTake: "",
         refillQuantity: "",
     });
+
+
+    // Controls the div when a med in the table is selected.
+    const [medInfoView, setMedInfoView] = useState(false);
+
 
     // Runs immediatly after the page is loaded.
     useEffect(() => {
@@ -75,13 +80,40 @@ function ProfilePage() {
         // ADD SUCCESS NOTIF
     }
 
-    const toggleViewMode = () => {
-        if (tableView) {
-            setTableView(false);
-            setNewMedView(true);
-        } else {
-            setNewMedView(false);
-            setTableView(true);
+    const deleteMed = async (medIndexToDelete) => {
+    }
+
+    const handleRowClick = (row) => {
+
+        // We can use the medData useState to store the row
+        setMedData(row);
+
+        console.log("here is medData", medData);
+
+        switchViewMode("medInfoView");
+
+    }
+
+
+    const switchViewMode = (mode) => {
+        switch (mode) {
+            case "tableView":
+                setTableView(true);
+                setNewMedView(false);
+                setMedInfoView(false);
+                break;
+            case "newMedView":
+                setTableView(false);
+                setNewMedView(true);
+                setMedInfoView(false);
+                break;
+            case "medInfoView":
+                setTableView(false);
+                setNewMedView(false);
+                setMedInfoView(true);
+                break;
+            default:
+                break;
         }
     }
     
@@ -92,7 +124,7 @@ function ProfilePage() {
                 { tableView && 
                     <div id='userPanel' className="col-auto text-center">
                         <div className='row-auto'>
-                            <button onClick={toggleViewMode}>+</button>
+                            <button onClick={() => switchViewMode("newMedView")}>+</button>
                         </div>
 
                         <table className="table">
@@ -107,8 +139,8 @@ function ProfilePage() {
                                 {/* Dynamically allocated table* */}
                                 { medData.map(
                                     // for Each row in medData
-                                    (row) => ( 
-                                        <tr>
+                                    (row, rowIndex) => ( 
+                                        <tr key={rowIndex} onClick={() => handleRowClick(row)}>
                                             <td>{row.MED_NAME}</td>
                                             <td>{row.TIME_TO_TAKE_AT + (row.IS_TIME_AM ? "AM" : "PM")}</td>
                                             <td>{row.CURRENT_QUANTITY}</td>
@@ -253,9 +285,34 @@ function ProfilePage() {
 
                         </div>
 
-                        <button class="btn btn-primary mt-2 mb-2" onClick={() => {addNewMed(); toggleViewMode();}}>Add</button>
+                        <button class="btn btn-primary mt-2 mb-2" onClick={() => {addNewMed(); switchViewMode("tableView");}}>Add</button>
                     </div>
                 }
+
+
+                { medInfoView && 
+                
+                    <div id='medInfoView' className="col-auto text-center">
+                        
+                        <div className="col-auto">
+
+                            {/* Current quan, name, amount to take, refill, time to take at+isam */}
+                            <h1>{medData[0]}</h1>
+
+
+
+                        </div>
+
+                    </div>
+                
+                
+                }
+
+
+
+
+
+
                         
             </div>
         </div>
