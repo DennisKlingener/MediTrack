@@ -149,7 +149,7 @@ router.post("/add", async (req, res) => {
         const decodedToken = jwt.verify(token, "CHANGE_THIS_KEY"); // MAKE A BETTER KEY
         const userId = decodedToken.userId;
         const timeZone = decodedToken.timeZone;
-        const convertedTime = convertTimeToUTC(timeToTakeAt, timeZone, isTimeAM);
+        const convertedTime = convertTimeToUTC(timeToTakeAt, timeZone, (isTimeAM == "1" ? true : false));
         console.log("Here is converted time:, ", convertedTime);
         values.push(convertedTime);
         values.push(isTimeAM);
