@@ -124,11 +124,19 @@ cron.schedule("* * * * *", async () => {
         const request = "SELECT * FROM users WHERE id = ?";
         let userId = row.USER_ID;
 
+        console.log("here is userid:", userId);
+
         // Make a request.
         const results = await asyncDatabaseQuery(request, [userId]);
 
+        console.log("second request results:", results);
+
+
         // Get the users email
         let userEmail = results[0].EMAIL;
+
+        console.log("userEmal:", userEmail);
+
 
         // Send an email tot he user    
         const emailConnection = nodemailer.createTransport({
@@ -138,6 +146,9 @@ cron.schedule("* * * * *", async () => {
                 pass: process.env.EMAIL_PASSWORD,
             }
         });
+
+
+        console.log("email con info:", emailConnection);
 
         emailConnection.sendMail({
             from: "meditrackreminder@gmail.com",
