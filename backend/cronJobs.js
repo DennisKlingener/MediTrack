@@ -140,7 +140,9 @@ cron.schedule("* * * * *", async () => {
 
         // Send an email tot he user    
         const emailConnection = nodemailer.createTransport({
-            service: "gmail",
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
                 user: "meditrackreminder@gmail.com",
                 pass: process.env.EMAIL_PASSWORD,
