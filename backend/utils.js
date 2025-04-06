@@ -117,7 +117,11 @@ function convertTimeToUTC(time, timeZone, isAM) {
         newTime = time.substring(0, 1);
     }
 
+    console.log("here is new time: ", newTime);
+
     let timeNumericalValue = parseInt(newTime, 10);
+
+    console.log("here is timeNumericalValue: ", timeNumericalValue);
 
     // If time is PM, add 12.
     if ( ((!isAM) && (timeNumericalValue != 12)) || ((isAM) && (timeNumericalValue == 12)) ) {
