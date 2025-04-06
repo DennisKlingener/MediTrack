@@ -114,6 +114,9 @@ cron.schedule("* * * * *", async () => {
     // async query. array of medications needed to be taken 
     const results = await asyncDatabaseQuery(selectRequest, values);
 
+    console.log("here  is values:", values);
+    console.log("here is results: ", results);  
+
     // Get the users thatneed t notified from the uiserid in the medications returned.
     for (let row of results) {
 
