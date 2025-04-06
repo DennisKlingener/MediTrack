@@ -119,6 +119,13 @@ function convertTimeToUTC(time, timeZone, isAM) {
 
     console.log("Here is isam: ", isAM);
 
+    if (!isAM) {
+        console.log("akhf;lkas");
+    }
+
+
+
+
     console.log("here is new time: ", newTime);
 
     let timeNumericalValue = parseInt(newTime, 10);
