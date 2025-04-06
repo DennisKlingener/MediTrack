@@ -13,7 +13,7 @@ router.use(express.json());
 const PORT = process.env.PORT || 5000; // Do we need this...
 
 // Initialize Firebase Admin (ensure you've added your service account file in the backend)
-const serviceAccount = require('backend/routes/firebaseServiceAccountKey.json');
+const serviceAccount = require("backend/routes/firebaseServiceAccountKey.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
 });
@@ -162,26 +162,16 @@ router.post("/verify-phone", async (req, res) => {
 
     try {
         const decodedToken = await admin.auth().verifyIdToken(idToken);
-        console.log('Decoded Token:', decodedToken);
 
-        const query = "SELECT * FROM users WHERE PHONE_NUMBER = ?";
-        const results = await asyncDatabaseQuery(query, [phoneNumber]);
-
-        if (!results || results.length === 0) {
-            const insertQuery = "INSERT INTO users (USER_NAME, PHONE_NUMBER) VALUES (?, ?)";
-            await asyncDatabaseQuery(insertQuery, ['New User', phoneNumber]);
+        // Compare phone number from token with the one submitted
+        if (decodedToken.phone_number !== phoneNumber) {
+            return res.status(401).json({ error: 'Phone number does not match token' });
         }
 
-        const customToken = await admin.auth().createCustomToken(decodedToken.uid);
-
-        res.status(200).json({
-            loginComplete: true,
-            message: "Phone number verified",
-            token: customToken,
-        });
+        res.status(200).json({ message: "Phone number verified successfully" });
     } catch (err) {
-        console.error('Error verifying Firebase token:', err);
-        return res.status(500).json({ error: 'Error verifying Firebase token' });
+        console.error("Verification error:", err);
+        res.status(500).json({ error: "Failed to verify phone number" });
     }
 });
 
