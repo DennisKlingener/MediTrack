@@ -117,6 +117,8 @@ function convertTimeToUTC(time, timeZone, isAM) {
         newTime = time.substring(0, 1);
     }
 
+    console.log("Here is isam: ", isAM);
+
     console.log("here is new time: ", newTime);
 
     let timeNumericalValue = parseInt(newTime, 10);
