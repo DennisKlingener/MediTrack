@@ -30,31 +30,24 @@ function getAndConfigureTime() {
     // Get the current time.
     const currentTime = new Date();
     let currentHour = currentTime.getHours();
-    let isAM = false;
-
-    // Check if AM or PM and mod if needed.
-    if (currentHour <= 11) {
-        isAM = true;
-    } else if (currentHour == 24) {
-        isAM = true;
-        currentHour = 1;
-    } else {
-        isAM = false;
-        currentHour = (currentHour % 12);
+    
+    if (currentHour == 0) {
+        currentHour = 24;
     }
 
-    return [currentHour, isAM];
+    return currentHour;
 }
 
 
 // Update all the values for medications who time to take is the current hour
 cron.schedule("0 * * * *", async () => {
 
+    // This gives us the UTC hour value in 24hr time.
     const timeInfo = getAndConfigureTime();
 
     // Query for all table entries whos time to take matches the current hour.
-    const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
-    let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`, (timeInfo[1]) ? 1 : 0];
+    const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ?";
+    let values = [(timeInfo > 9) ? `${timeInfo}:00:00` : `0${timeInfo}:00:00`];
 
     console.log("here is values:", values);
 
@@ -115,8 +108,8 @@ cron.schedule("* * * * *", async () => {
     console.log("here is time info:", timeInfo);
 
     // Query for all table entries whos time to take matches the current hour.
-    const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
-    let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`, (timeInfo[1]) ? 1 : 0];
+    const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ?";
+    let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`];
 
     // async query. array of medications needed to be taken 
     const results = await asyncDatabaseQuery(selectRequest, values);
