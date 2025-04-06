@@ -63,6 +63,7 @@
 - Fix the add medication api its kinda bad. (checking that all the data is present)
 - Make it so when you add a new med it pops up without refreshing the screen.
 - Need a permenant solution to checking if we are in daylight savings or not.
+- need less than 0 checks for time to utc
 
 
 ## Notes:

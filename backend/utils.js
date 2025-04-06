@@ -7,14 +7,6 @@ function isDST() {
     return Math.min(jan, jul) !== new Date().getTimezoneOffset();
 }
 
-function modTime(time) {
-    if (time > 24) {
-        time = (time % 24);
-    }
-    
-    return time;
-}
-
 function convertTimeToString(time) {
     if (time > 9) {
         timeString = time.toString();
@@ -123,9 +115,6 @@ function convertTimeToUTC(time, timeZone, isAM) {
         console.log("akhf;lkas");
     }
 
-
-
-
     console.log("here is new time: ", newTime);
 
     let timeNumericalValue = parseInt(newTime, 10);
@@ -186,7 +175,15 @@ function convertTimeToUTC(time, timeZone, isAM) {
             console.log("Invalid Timezone!");
     }
 
-    timeNumericalValue = modTime(timeNumericalValue);
+    if (timeNumericalValue < 0) {
+        timeNumericalValue *= -1;
+        timeNumericalValue = (24 - timeNumericalValue);
+    } else if (timeNumericalValue > 24) {
+        timeNumericalValue = timeNumericalValue % 24;
+    } else if (timeNumericalValue == 0) {
+        timeNumericalValue = 24;
+    }
+
     return convertTimeToString(timeNumericalValue);
 }   
 
