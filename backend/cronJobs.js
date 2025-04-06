@@ -112,6 +112,8 @@ cron.schedule("* * * * *", async () => {
 
     const timeInfo = getAndConfigureTime();
 
+    console.log("here is time info:", timeInfo);
+
     // Query for all table entries whos time to take matches the current hour.
     const selectRequest = "SELECT * FROM medications WHERE TIME_TO_TAKE_AT = ? AND IS_TIME_AM = ?";
     let values = [(timeInfo[0] > 9) ? `${timeInfo[0]}:00:00` : `0${timeInfo[0]}:00:00`, (timeInfo[1]) ? 1 : 0];
