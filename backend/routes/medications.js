@@ -150,6 +150,7 @@ router.post("/add", async (req, res) => {
         const userId = decodedToken.userId;
         const timeZone = decodedToken.timeZone;
         const convertedTime = convertTimeToUTC(timeToTakeAt, timeZone, isTimeAM);
+        console.log("Here is converted time:, ", convertedTime);
         values.push(convertedTime);
         values.push(isTimeAM);
         values.push(userId);
