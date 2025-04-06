@@ -108,6 +108,8 @@ cron.schedule("0 * * * *", async () => {
 // Send emails to all the users that have a medication to take at the current hour.
 cron.schedule("* * * * *", async () => {
 
+    console.log("in email cron");
+
     const timeInfo = getAndConfigureTime();
 
     // Query for all table entries whos time to take matches the current hour.

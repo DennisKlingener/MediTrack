@@ -258,8 +258,7 @@ function ProfilePage() {
                                     id="newMedAmCheck"
                                     className="form-check-input"
                                     name='isTimeAM' 
-                                    type="checkbox" 
-                                    value={newMedFormData.isTimeAM} 
+                                    type="checkbox"  
                                     ref={isAmRef}
                                 />
                                 <label class="form-check-label" for="flexCheckDefault">AM</label>
