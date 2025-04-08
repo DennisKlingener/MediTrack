@@ -290,8 +290,8 @@ function ProfilePage() {
 
                         <button onClick={() => {switchViewMode("tableView")}} className='btn btn-primary'>Back</button>
                         <button onClick={() => {
-                            deleteMed(medData[medInfoToDisplay]?.MED_NAME);
-                            switchViewMode("tabelView");
+                            deleteMed(medData[medInfoToDisplay]?.MED_NAME)
+                            switchViewMode("tabelView")
                             }}
                         className='btn btn-primary'>Delete</button>
                         
