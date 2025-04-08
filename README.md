@@ -58,12 +58,12 @@
 - Need to ensure the front end login has a controlled time zone drop down menu to match whats expected in the endpoints etc.
 - Need to place our api endpoints in our .env or a gitlab secret. These need to be secure.
 - Implement error messages in the UI for login and signup errors.
-- Convert from utc to timezone on front end profile page.
 - There will be errors when taking more pills than you have left.
 - Fix the add medication api its kinda bad. (checking that all the data is present)
 - Make it so when you add a new med it pops up without refreshing the screen.
 - Need a permenant solution to checking if we are in daylight savings or not.
 - need less than 0 checks for time to utc
+
 
 
 ## Notes:
