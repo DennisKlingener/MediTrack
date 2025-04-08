@@ -275,7 +275,7 @@ function ProfilePage() {
                         
                         <h1 id="medInfoViewName">{medData[medInfoToDisplay]?.MED_NAME}</h1>
 
-                        <div id='colsParent' className="row text-center">
+                        <div id='colsParent' className="row d-flex justify-content-center">
 
                             <div id='leftCol' className="col-auto text-start">
                                 <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
