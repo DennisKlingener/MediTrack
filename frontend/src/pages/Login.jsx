@@ -1,18 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import '../styles/Login.css'
-
-
-// FOR THE LOGIN PAGE WE CAN HAVE ONE ROW WITH ONE COLUMN WITH TWO DIVS IN IT.
-// ONE DIV CONTAINS THE SIGNUP FORM AND THE OTHER THE SIGN IN FORM.
-// DEPENDING ON WHAT THE USER CLICKS ON FROM THE LANDING PAGE (MEDITRACKINDEX.JSX)
-// WILL DETERMINE WHICH FORM IS LOADED. THE OTHER WILL BE INVISIABLE.
-
-
-// INSTEAD OF USING CONDITIONAL RENDERING JUST MAKE A SIGNIN AND LOGIN PAGE IF WE HAVE TIME!!
-
-
-
 
 function Login() {
 
@@ -41,13 +30,24 @@ function Login() {
 
     }, []);
 
-
     const toggleForms = () => {
         setSignUpForm(!signUpForm);
         setSignInForm(!signInForm);
+        setSignInFormData({
+            userName: "",
+            password: "",
+        });
+        setSignUpFormData({
+            firstName: "",
+            lastName: "",
+            userName: "",
+            phoneNumber: "",
+            email: "",
+            timeZone: "",
+            password: "",
+            passwordCheck: "",
+        });
     }
-
-
 
     // CODE FOR LOGIN \\
 
@@ -98,9 +98,6 @@ function Login() {
 
     // END LOGIN CODE \\
 
-
-
-
     // CODE FOR SIGN UP \\
 
     const [signUpFormData, setSignUpFormData] = useState({
@@ -113,7 +110,6 @@ function Login() {
         password: "",
         passwordCheck: "",
     });
-
 
     const handleSignUp = async () => {
 
@@ -166,22 +162,23 @@ function Login() {
 
     // END CODE FOR SIGN UP \\
 
-
-
-
-
     return (
 
         <div id='loginContainer' className='container-fluid'>
 
-            <div className="row justify-content-center">
+            <div id='navbar' className='row'>
+                <Navbar/>
+            </div>
+
+            <div id="loginParent" className="row justify-content-center">
 
                 <div className="col-auto text-center">
 
                     {signUpForm &&   
                         <div id='signUpForm'>
+
                             <div className="row">            
-                                <div className="signUpFormTitle">Sign Up</div>
+                                <div id="signUpFormTitle">Sign Up</div>
                                 <div className="col-sm">
                                     {/* first name */}
                                     <div className="form-group mt-2 mb-2">
@@ -285,11 +282,10 @@ function Login() {
                                     {/* THIS NEEDS TO BE A DROP DOWN!!!!!!! */}
                                     <div className="form-group mt-2 mb-2">
                                         <label for="timeZoneSignUpLabel">Time Zone</label>
-                                        <input
+                                        <select
                                             id="timeZoneSignUpInput"
                                             className="form-control"
                                             name="timeZone"
-                                            type="text"
                                             value={signUpFormData.timeZone}
                                             onChange={(e) => {
                                                 setSignUpFormData({
@@ -298,7 +294,16 @@ function Login() {
                                                 });
                                             }}
                                             placeholder="Time Zone"
-                                        />
+                                        >
+                                            <option>EASTERN TIME</option>
+                                            <option>CENTRAL TIME</option>
+                                            <option>MOUNTAIN TIME</option>
+                                            <option>PACIFIC TIME</option>
+                                            <option>ALASKA TIME</option>
+                                            <option>HAWAII TIME</option>
+                                            <option>SAMOA TIME</option>
+                                            <option>CHAMORRO TIME</option>
+                                        </select>
                                     </div>
 
                                     {/* Password */}
@@ -343,15 +348,13 @@ function Login() {
                           
                             <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
                             <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
-                            
-                            
                         </div> 
                     }
 
                     {signInForm && 
                         <div id="signInForm">
 
-                            <div id="signInFormTitle">Sign-In</div>
+                            <div id="signInFormTitle">Sign In</div>
 
                             <div className="form-group mt-2 mb-2">
                                 <label for="userNameLoginLabel">Username</label>
@@ -376,7 +379,7 @@ function Login() {
                                     id="passwordInputLogin"
                                     className='form-control'  
                                     name="password"
-                                    type="text" 
+                                    type="password" 
                                     value={signInFormData.password}
                                     onChange={(e) => {
                                         setSignInFormData({
@@ -396,6 +399,5 @@ function Login() {
         </div>
     );
 };
-
 
 export default Login;

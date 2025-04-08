@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'; // FOR BOOTSTRAP
 import '../styles/index.css' // GLOBAL STYLES
+import { ViewProvider } from '../../viewContext.jsx';
 
 
 // PAGES
@@ -15,13 +16,15 @@ import ProfilePage from './ProfilePage.jsx';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>  
-      <Routes>
+      <ViewProvider>
+        <Routes>
 
-        <Route path='/' element={<MediTrackIndex />} />
-        <Route path='/Login' element={<Login />} />
-        <Route path='/Profile' element={<ProfilePage />} />
+          <Route path='/' element={<MediTrackIndex />} />
+          <Route path='/Login' element={<Login />} />
+          <Route path='/Profile' element={<ProfilePage />} />
 
-      </Routes>
+        </Routes>
+      </ViewProvider>
     </Router>
   </StrictMode>
 );
