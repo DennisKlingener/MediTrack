@@ -273,16 +273,16 @@ function ProfilePage() {
                 { medInfoView && 
                     <div id='medInfoView' className="col-auto text-center">
                         
-                        <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
+                        <h1 id="medInfoViewName">{medData[medInfoToDisplay]?.MED_NAME}</h1>
 
-                        <div className="row">
+                        <div id='colsParent' className="row">
 
-                            <div className="col-auto text-center">
+                            <div id='leftCol' className="col-auto text-center">
                                 <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
                                 <h2>Amount to take: {medData[medInfoToDisplay]?.AMOUNT_TO_TAKE}</h2>
                             </div>
 
-                            <div className="col-auto text-center">
+                            <div id='rightCol' className="col-auto text-center">
                                 <h2>Refill amount: {medData[medInfoToDisplay]?.REFILL_QUANTITY}</h2>
                                 <h2>Time to take at: {medData[medInfoToDisplay]?.TIME_TO_TAKE_AT}</h2>
                             </div>
