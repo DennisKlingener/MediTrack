@@ -120,7 +120,8 @@ function ProfilePage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* Dynamically allocated table* */}
+
+                                 {/* Dynamically allocated table */}
                                 { medData.map(
                                     // for Each row in medData
                                     (row, rowIndex) => ( 
@@ -130,7 +131,7 @@ function ProfilePage() {
                                             <td>{row.CURRENT_QUANTITY}</td>
                                         </tr>
                                     ))
-                                }
+                                }      
                             </tbody>
                         </table>
                     </div>
@@ -272,31 +273,28 @@ function ProfilePage() {
                 { medInfoView && 
                     <div id='medInfoView' className="col-auto text-center">
                         
-                        <div className="col-auto">
+                        <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
 
-                            <h1>{medData[medInfoToDisplay]?.MED_NAME}</h1>
+                        <div className="row">
 
-                            <div className="row">
-
-                                <div className="col-auto text-center">
-                                    <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
-                                    <h2>Amount to take: {medData[medInfoToDisplay]?.AMOUNT_TO_TAKE}</h2>
-                                </div>
-
-                                <div className="col-auto text-center">
-                                    <h2>Refill amount: {medData[medInfoToDisplay]?.REFILL_QUANTITY}</h2>
-                                    <h2>Time to take at: {medData[medInfoToDisplay]?.TIME_TO_TAKE_AT}</h2>
-                                </div>
+                            <div className="col-auto text-center">
+                                <h2>Current quantity: {medData[medInfoToDisplay]?.CURRENT_QUANTITY}</h2>
+                                <h2>Amount to take: {medData[medInfoToDisplay]?.AMOUNT_TO_TAKE}</h2>
                             </div>
 
-                            <button onClick={() => {switchViewMode("tableView")}}>Back</button>
-                            <button onClick={() => {
-                                deleteMed(medData[medInfoToDisplay]?.MED_NAME);
-                                switchViewMode("tabelView");
-                                }}
-                            >Delete</button>
+                            <div className="col-auto text-center">
+                                <h2>Refill amount: {medData[medInfoToDisplay]?.REFILL_QUANTITY}</h2>
+                                <h2>Time to take at: {medData[medInfoToDisplay]?.TIME_TO_TAKE_AT}</h2>
+                            </div>
                         </div>
 
+                        <button onClick={() => {switchViewMode("tableView")}} className='btn btn-primary'>Back</button>
+                        <button onClick={() => {
+                            deleteMed(medData[medInfoToDisplay]?.MED_NAME);
+                            switchViewMode("tabelView");
+                            }}
+                        className='btn btn-primary'>Delete</button>
+                        
                     </div>
                 }
                         
