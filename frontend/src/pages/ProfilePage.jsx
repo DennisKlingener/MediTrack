@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import '../styles/ProfilePage.css'
+import Navbar from '../components/Navbar';
+import { useView } from '../../viewContext';    // Function to change views. Exported becasue navbar needs it aswell.
+import '../styles/ProfilePage.css';
 
 function ProfilePage() {
-
-    // Upon page load, make a query for all the users medis using the id from the jwt token
-    // dynamically init the table with all the users data.
-
-    const [tableView, setTableView] = useState(true);
-    const [newMedView, setNewMedView] = useState(false);
-
+    
+    const {tableView, newMedView, medInfoView, switchViewMode} = useView();
 
     const [medData, setMedData] = useState([]);
     const [newMedFormData, setNewMedFormData] = useState({
@@ -23,7 +20,6 @@ function ProfilePage() {
     const isAmRef = useState(null);
 
     // Controls the div when a med in the table is selected.
-    const [medInfoView, setMedInfoView] = useState(false);
     const [medInfoToDisplay, setMedInfoToDisplay] = useState(0);
 
     // Runs immediatly after the page is loaded.
@@ -103,39 +99,18 @@ function ProfilePage() {
         setMedInfoToDisplay(rowIndex);
         switchViewMode("medInfoView");
     }
-
-    const switchViewMode = (mode) => {
-        switch (mode) {
-            case "tableView":
-                setTableView(true);
-                setNewMedView(false);
-                setMedInfoView(false);
-                break;
-            case "newMedView":
-                setTableView(false);
-                setNewMedView(true);
-                setMedInfoView(false);
-                break;
-            case "medInfoView":
-                setTableView(false);
-                setNewMedView(false);
-                setMedInfoView(true);
-                break;
-            default:
-                break;
-        }
-    }
     
     return (
         <div id="profilePageContainer" className="container-fluid">
-            <div className='row justify-content-center'>
+
+            <div className='row'>
+                <Navbar />
+            </div>
+
+            <div id='profilePageParent' className='row justify-content-center'>
                     
                 { tableView && 
                     <div id='userPanel' className="col-auto text-center">
-                        <div className='row-auto'>
-                            <button onClick={() => switchViewMode("newMedView")}>+</button>
-                        </div>
-
                         <table className="table table-hover">
                             <thead>
                                 <tr>
@@ -166,10 +141,11 @@ function ProfilePage() {
 
                         <div className="row">
                             <div id='newMedFormTitle'>New Medication</div>
-                            <div className='col-sm'>
+                            
+                            <div className='col'>
                                 {/* Medication Name */}
                                 <div className="form-group mt-2 mb-2">
-                                    <label for="newMedNameLabel">Medication Name</label>
+                                    <label for="newMedNameLabel">New medication name</label>
                                     <input 
                                         id="newMedNameInput"
                                         className="form-control"
@@ -182,13 +158,13 @@ function ProfilePage() {
                                                 [e.target.name]: e.target.value
                                             });
                                         }}
-                                        placeholder='Medication Name'
+                                        placeholder='Medication name'
                                     />
                                 </div>
 
                                 {/* Medication Quantity */}
                                 <div className="form-group mt-2 mb-2">
-                                    <label for="newMedCurrentQuantityLabel">Current Quantity</label>
+                                    <label for="newMedCurrentQuantityLabel">Current quantity</label>
                                     <input 
                                         id="newMedCurrentQuantityInput"
                                         className="form-control"
@@ -201,13 +177,13 @@ function ProfilePage() {
                                                 [e.target.name]: e.target.value
                                             });
                                         }}
-                                        placeholder='How many pills currently held?'
+                                        placeholder='How many pills do you currently have?'
                                     />
                                 </div>
 
                                 {/* Amount to take */}
                                 <div className="form-group mt-2 mb-2">
-                                    <label for="newMedAmountToTakeLabel">Amount To Take</label>
+                                    <label for="newMedAmountToTakeLabel">Amount to take</label>
                                     <input 
                                         id="newMedAmountToTakeInput"
                                         className="form-control"
@@ -226,7 +202,7 @@ function ProfilePage() {
 
                                 {/* Time To Take At */}
                                 <div className="form-group mt-2 mb-2">
-                                    <label for="newMedTimeToTakeAtLabel">TimeToTakeAt</label>
+                                    <label for="newMedTimeToTakeAtLabel">When do you take your medication</label>
                                     <select 
                                         id='newMedTimeToTakeAt'
                                         class="form-select" 
@@ -265,7 +241,7 @@ function ProfilePage() {
 
                                 {/* Refill Quantity */}
                                 <div className="form-group mt-2 mb-2">
-                                    <label for="newMedRefillQuantityLabel">Refill Amount</label>
+                                    <label for="newMedRefillQuantityLabel">Refill amount</label>
                                     <input 
                                         id="newMedRefillQuantityInput"
                                         className="form-control"
@@ -288,7 +264,8 @@ function ProfilePage() {
 
                         </div>
 
-                        <button class="btn btn-primary mt-2 mb-2" onClick={() => {addNewMed(); switchViewMode("tableView");}}>Add</button>
+                        <button className="btn btn-primary mt-2 mb-2 mr-1" onClick={() => {addNewMed(); switchViewMode("tableView");}}>Add</button>
+                        <button className='btn btn-primary mt-2 mb-2 ml-1' onClick={() => {switchViewMode("tableView");}}>Cancel</button>
                     </div>
                 }
 

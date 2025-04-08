@@ -1,10 +1,20 @@
 #loginContainer {
-    height: 100vh;
-    align-content: center;
+    
+    height: 100vh; 
+    overflow-y: hidden;
+
 }
+
+#loginParent {
+    align-content: center;
+    height: 90vh; 
+}
+
 
 #signUpFormTitle {
     font-size: 35px;
+    color: royalblue;
+    font-weight: bold;
 }
 
 #signUpForm {
@@ -12,15 +22,23 @@
     border-width: 5px;
     border-color: royalblue;
     border-radius: 15%;
+    
+    background-color: #f5f5f5;
 
     padding-top: 30px;
     padding-left: 30px;
     padding-bottom: 30px;
     padding-right: 30px;
+
+    
+    
+
 }
 
 #signInFormTitle {
     font-size: 35px;
+    color: royalblue;
+    font-weight: bold;
 }
 
 #signInForm {
@@ -29,13 +47,14 @@
     border-color: royalblue;
     border-radius: 15%;
 
+    background-color: #f5f5f5;
+
     padding-top: 30px;
     padding-left: 30px;
     padding-bottom: 30px;
     padding-right: 30px;
-}
 
+    
+    
 
-#test {
-    color: #0000EE;
 }

@@ -1,10 +1,45 @@
-#title {
-    color: red;
-}   
-
 
 #MediTrackIndexContainer {
-    height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
+
+    height: 100vh;
+
+    color: #333333;
+}
+
+#titleParent {
+    margin-top: 5vh;
+    
+    text-align: center;
+}
+
+#title {
+    color: royalblue;
+    
+    font-size: 100px
+}  
+
+
+#appDesc {
+    margin-top: 15vh;
+
+    text-align: center;
+}
+
+#signinSignup {
+    margin-top: 25vh;
+}
+
+.btn-control {
+    height: 75px;
+    width: 275px;
+
+    font-size: 35px;
+}
+
+#appDesc {
+    color: #000000;
+
+    font-size: 20px;
 }
