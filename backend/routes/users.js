@@ -2,21 +2,13 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const admin = require('firebase-admin');
 
 // Express function that parses incoming JSON
 router.use(express.json());
- 
+
 // Port that the server is running on.
 // Do the backend and frontend need to be on different ports?
 const PORT = process.env.PORT || 5000; // Do we need this...
-
-// Initialize Firebase Admin (ensure you've added your service account file in the backend)
-const serviceAccount = require("backend/routes/firebaseServiceAccountKey.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
 
 // PUT THIS IN UTILS. THIS IS REWRITTEN CODE BAD BAD BAD
 async function asyncDatabaseQuery(request, values) {
@@ -38,34 +30,10 @@ async function asyncDatabaseQuery(request, values) {
     }
 }
 
-// Function to create a JWT token
-function createJWTToken(user) {
-
-    const payload = {
-        userId: user.id,
-        firstName: user.FIRST_NAME,
-        lastName: user.LAST_NAME,
-        userName: user.USER_NAME,
-        password: user.PASSWORD,
-        phoneNumber: user.PHONE_NUMBER,
-        email: user.EMAIL,
-        timeZone: user.TIMEZONE
-    }
-
-
-    console.log("Here is the payload: ", payload);
-
-    const secretKey = "CHANGE_THIS_KEY";
-
-    const token = jwt.sign(payload, secretKey, {expiresIn: "2h"});
-
-    return token;
-}
-
 // Get user with paramters {[para: meters]}
 // One search functin for users. Appended where clause to the end of
 // SELECT * FROM users WHERE <parameters>;
-/*router.get("/search", (req, res) => {
+router.get("/search", (req, res) => {
 
     // Get the passed in parameters to search by.
     const {id, firstName, lastName, userName, password, phoneNumber, email, timeZone} = req.query;
@@ -146,96 +114,99 @@ function createJWTToken(user) {
     });
 });
 
-const serviceAccount = require("firebaseServiceAccountkey.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    )};
-*/
-
-// Verify phone number with Firebase authentication
-router.post("/verify-phone", async (req, res) => {
-    const { idToken, phoneNumber } = req.body;
-
-    if (!idToken || !phoneNumber) {
-        return res.status(400).json({ error: 'ID token and phone number are required' });
-    }
-
-    try {
-        const decodedToken = await admin.auth().verifyIdToken(idToken);
-
-        // Compare phone number from token with the one submitted
-        if (decodedToken.phone_number !== phoneNumber) {
-            return res.status(401).json({ error: 'Phone number does not match token' });
-        }
-
-        res.status(200).json({ message: "Phone number verified successfully" });
-    } catch (err) {
-        console.error("Verification error:", err);
-        res.status(500).json({ error: "Failed to verify phone number" });
-    }
-});
-
 // Login
 router.post("/login", async (req, res) => {
-    
-    // Get the json from the login request.
-   const {userName, password} = req.body;
+  // if there is a google firebase token, habdle the google login
+  if (req.body.token) {
+    try {
+     const token = req.body.token;
 
-    // Init the values array and field names to ensure all required fields are present.
+     // verify the firebase token using firebase admin sdk
+     const decodedToken = await admin.auth().verifyIDToken(token);
+     const uid = decodedToken.uid;
+
+     // retrieve user details using decoded token information
+     const request = "SELECT * FROM user WHERE USER_NAME = ?";
+     const values = [decodedToken.email]; // using email as the username
+     const results = await asyncDatabaseQuery(request, values);
+
+     if (results.length === 0){
+      return res.status(404).json({
+       "loginComplete": false;
+       "message": "USER_NOT_FOUND"
+    });
+  }
+
+   // Generate a JWT token for session management
+   const userToken = jwt.sign(
+    {
+         userId: results[0].id,
+         firstName: results[0].FIRST_NAME,
+         lastName: results[0].LAST_NAME,
+         userName: results[0].USER_NAME,
+         phoneNumber: results[0].PHONE_NUMBER,
+         email: results[0].EMAIL,
+         timeZone: results[0].TIMEZONE
+    },
+        "CHANGE_THIS_KEY",
+        { expiresIn: "2h" }
+    );
+
+   // store the toke in an HTTP cookie
+   res.cookie("token", userToken, {
+    httpOnly: true;
+    secure: false;
+    sameSite: "strict"
+  });
+
+  resturn res.status(200).json({
+   "loginComplete": true,
+   "message": "LOGIN_COMPLETE"
+   )};
+} catch (error) {
+   console.log("Error verifying Firebase token: ", error);
+   return res.status(500).json({
+     "loginComplete": falso,
+     "message": "GOOGLE_LOGIN_FAILED"
+   });
+  }
+}
+
+// otherwise, handle traditional login with username/password
+const {username, password} = req.body;
+
+// init the values array and field names to ensure all required fields are present.
     let values = [userName, password];
     let requiredFields = ["userName", "password"];
 
     // Ensure all data is present for user login and add values to the values array.
-    /*for (let i = 0; i < values.length; i++) {
+    for (let i = 0; i < values.length; i++) {
         if (!values[i]) {
-            return res.status(500).json({error: `Login data ${requiredFields[i]} is missing`});
+            return res.status(500).json({ error: `Login data ${requiredFields[i]} is missing` });
         }
     }
-
-    // Make an async query.
+    // Make an async query to check the username and password.
     const request = "SELECT * FROM users WHERE USER_NAME = ?";
     const results = await asyncDatabaseQuery(request, values);
-    
-    console.log(results);
-    */
-    
-    // Validate that both username and password are provided in the request
-    if (!userName || !password) {
-        return res.status(500).json({ error: "Login data missing" });
-    }
-
-    const request = "SELECT * FROM users WHERE USER_NAME = ?";
-    const results = await asyncDatabaseQuery(request, [userName]);
-   
-    // If no matching user is found, return a response indicating user does not exist
-    if (results.length === 0) {
-        return res.status(200).json({
-            loginComplete: false,
-            message: "USER_NOT_FOUND"
-        });
-    }
-
-    const user = result[0];
 
     // Check that the password passed to this endpoint matches the password found from the query.
-   /* if (values[1] == results[0].PASSWORD) {
-
-        // Need to init a jwt token with the users information and return a success statment back the frontend here. 
-        console.log("passwords match!");
-
+    if (results.length > 0 && values[1] == results[0].PASSWORD) {
+        // Generate a JWT token for session management
         const token = jwt.sign(
-            {userId: results[0].id,
-            firstName: results[0].FIRST_NAME,
-            lastName: results[0].LAST_NAME,
-            userName: results[0].USER_NAME,
-            phoneNumber: results[0].PHONE_NUMBER,
-            email: results[0].EMAIL,
-            timeZone: results[0].TIMEZONE }, 
-            "CHANGE_THIS_KEY", 
-            {expiresIn: "2h"}
+            {
+                userId: results[0].id,
+                firstName: results[0].FIRST_NAME,
+                lastName: results[0].LAST_NAME,
+                userName: results[0].USER_NAME,
+                phoneNumber: results[0].PHONE_NUMBER,
+                email: results[0].EMAIL,
+                timeZone: results[0].TIMEZONE
+            },
+            "CHANGE_THIS_KEY",  // Replace with a secure key
+            { expiresIn: "2h" }
         );
 
-        // Store the token in a http cookie.
+        // Store the token in an HTTP cookie
         res.cookie("token", token, {
             httpOnly: true,
             secure: false,
@@ -245,60 +216,14 @@ router.post("/login", async (req, res) => {
         return res.status(200).json({
             "loginComplete": true,
             "message": "LOGIN_COMPLETE"
-        });        
+        });
     } else {
-        // Here the password was incorrect, send back a failure.
-        console.log("passwords dont match!");
-
+     
+        // Password didn't match or user not found
         return res.status(200).json({
             "loginComplete": false,
             "message": "INCORRECT_PASSWORD"
         });
-    }
-    
-    // Here we connect firebase to react and mysql database
-    const custonToken = await admin.auth().createCustomToken(user.USER_NAME);
-    
-    return res.status(200).json({
-        "loginComplete": true,
-        "phoneNumber": user.PHONE_NUMBER,
-        "message": "PASSWORD_VALID_PROCEED_TO_FIRERBASE_2FA"
-    )};
-});*/
-
-    const passwordMatch = await bcrypt.compatre(password, user.PASSWORD);
-
-   /* if (results.length > 0 && values[1] === results[0].PASSWORD) {
-        const token = createJWTToken(results[0]);
-        res.cookie("token", token, { secure: true, sameSite: "strict" });
-
-        return res.status(200).json({
-            loginComplete: true,
-            message: "LOGIN_COMPLETE"
-        });
-    } else {
-        return res.status(200).json({
-            loginComplete: false,
-            message: "INCORRECT_PASSWORD"
-        });
-    }*/
-if (!passwordMatch) {
-        return res.status(401).json({ loginComplete: false, message: "INCORRECT_PASSWORD" });
-    }
-
-    // **Step 2: Generate a Firebase Custom Token for 2FA**
-    try {
-        const firebaseToken = await admin.auth().createCustomToken(user.USER_NAME);
-
-        return res.status(200).json({
-            loginComplete: true,
-            message: "PASSWORD_VALID_PROCEED_TO_FIREBASE_2FA",
-            phoneNumber: user.PHONE_NUMBER,
-            firebaseToken,
-        });
-    } catch (err) {
-        console.error("Error creating Firebase custom token:", err);
-        return res.status(500).json({ error: "Error generating Firebase token" });
     }
 });
 
@@ -375,4 +300,3 @@ router.delete("/delete/:id", (req, res) => {
 // Edit user... not 100% needed...
 
 module.exports = router;
-
