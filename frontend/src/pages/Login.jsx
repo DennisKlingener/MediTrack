@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithPopup } from 'firebase/auth'; // If using Firebase for Google Sign-In
 import { auth, provider } from './firebaseConfig'; // Assuming you have Firebase config
 import Navbar from './Navbar'; // Assuming you have a Navbar component
+import { auth, provider } from '../config/fireBaseAuth';
 
 const Login = () => {
     const [signUpForm, setSignUpForm] = useState(false);
