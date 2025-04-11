@@ -1,10 +1,15 @@
 const admin = require('firebase-admin');
 
-// Initialize Firebase Admin with the service account key
-const serviceAccount = require(process.env.FIREBASE_SERVICE_ACCOUNT);  // Correct path
+// Decode the Base64 encoded service account key string
+const serviceAccountBase64 = process.env.FIREBASE_SERVICE_ACCOUNT;
+const serviceAccountJson = Buffer.from(serviceAccountBase64, 'base64').toString('utf-8');
 
+// Parse the decoded JSON string to a JavaScript object
+const serviceAccount = JSON.parse(serviceAccountJson);
+
+// Initialize the Firebase Admin SDK using the decoded service account
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-module.exports = admin;
+console.log('Firebase Admin SDK initialized!');
