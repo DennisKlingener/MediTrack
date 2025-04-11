@@ -54,7 +54,33 @@
     padding-bottom: 30px;
     padding-right: 30px;
 
-    
-    
+}
 
+.googleSignInButton {
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.googleSignInButton:hover {
+    background-color: #357AE8;
+}
+
+.googleIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.googleSignInButtonText {
+    font-size: 16px;
+    font-weight: bold;
 }
