@@ -15,9 +15,6 @@ function Login() {
         password: "",
         passwordCheck: "",
     });
-    const [message, setMessage] = useState('');
-    const navigate = useNavigate();
-    const location = useLocation();
 
     useEffect(() => {
         const data = location.state?.data;
@@ -101,6 +98,10 @@ function Login() {
         }
     };
 
+const LoginComponent = () => {
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
+  
     const loginWithGoogle = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
