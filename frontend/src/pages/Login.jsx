@@ -447,5 +447,3 @@ const loginWithGoogle = async () => {
         </div>
     );
 };
-
-export default;
