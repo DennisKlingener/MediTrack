@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import '../styles/Login.css'
-import axios from "axios";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
@@ -181,26 +180,31 @@ function Login() {
     // END CODE FOR SIGN UP \\
 
     // GOOGLE SIGNUP
-     const handleGoogleLogin = async () => {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const idToken = await result.user.getIdToken();
-
-            const response = await axios.post("/login", {
-                token: idToken
-            });
-
-            if (response.data.loginComplete) {
-                setMessage("Google login successful!");
-            } else {
-                setMessage(response.data.message);
-            }
-        } catch (error) {
-            console.error("Google login error:", error);
-            setMessage("Google login failed.");
+const Login = () => {
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
+  
+const loginWithGoogle = async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const idToken = await result.user.getIdToken();
+        const response = await fetch("http://159.203.164.160:5000/routes/users/google-login", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token: idToken }),
+            credentials: 'include',
+        });
+        const responseData = await response.json();
+        if (responseData.loginComplete) {
+            navigate("/Profile");
+        } else {
+            setMessage(responseData.message);
         }
-    };
-
+    } catch (error) {
+        console.error("Google login error:", error);
+        setMessage("Google login failed.");
+    }
+};
     return (
 
         <div id='loginContainer' className='container-fluid'>
@@ -433,7 +437,7 @@ function Login() {
                             <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
 
                             <button className="googleSignInButton mt-3" onClick={handleGoogleLogin}>
-                                <img src="/google-icon.svg" alt="Google icon" className="googleIcon" />
+                                <img src="/images/google-icon.png" alt="Google icon" className="googleIcon" />
                                 Sign in with Google
                             </button>
                         </div>
