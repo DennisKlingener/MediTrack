@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import '../styles/Login.css'
+import '../styles/Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
@@ -21,7 +21,6 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 function Login() {
-
     // Page navigator
     const navigate = useNavigate();
 
@@ -31,21 +30,19 @@ function Login() {
     // For conditional rendering of the form divs.
     const [signUpForm, setSignUpForm] = useState(false);
     const [signInForm, setSignInForm] = useState(false);
-    
-    // Runs immediatly after the page is loaded.
-    useEffect(() => {
 
-        // Get the form selected from the previous page  (MediTrackIndex.jsx)
-        const data = location.state?.data; 
+    // Runs immediately after the page is loaded.
+    useEffect(() => {
+        // Get the form selected from the previous page (MediTrackIndex.jsx)
+        const data = location.state?.data;
 
         // Display the correct form depending on what "form" is.
-        if (data.formToLoad == "SIGNUP") {
-           setSignUpForm(true);
+        if (data?.formToLoad === "SIGNUP") {
+            setSignUpForm(true);
         } else {
             setSignInForm(true);
         }
-
-    }, []);
+    }, [location]);
 
     const toggleForms = () => {
         setSignUpForm(!signUpForm);
@@ -64,30 +61,23 @@ function Login() {
             password: "",
             passwordCheck: "",
         });
-    }
+    };
 
     // CODE FOR LOGIN \\
-
-    const [signInFormData, setSignInFormData] = useState ({
+    const [signInFormData, setSignInFormData] = useState({
         userName: "",
         password: "",
     });
 
     const handleLogin = async () => {
-
         // Get the entered information
         const data = {
-            userName: signInFormData.userName, 
-            password: signInFormData.password
+            userName: signInFormData.userName,
+            password: signInFormData.password,
         };
 
-        console.log(data);
-
         try {
-
-            // PUT THIS IN THE ENV!!!!
             const apiURL = "http://159.203.164.160:5000/routes/users/login";
-
             const response = await fetch(apiURL, {
                 method: "POST",
                 credentials: "include",
@@ -98,25 +88,18 @@ function Login() {
             });
 
             const result = await response.json();
-            console.log(result)
 
-            // Check if the login was successful.
             if (result.loginComplete) {
                 navigate("/Profile");
             } else {
-                // put an error message here.
-                console.log("WIP");
-            }   
-
+                console.log("Login failed");
+            }
         } catch (error) {
             console.log(error);
         }
     };
 
-    // END LOGIN CODE \\
-
     // CODE FOR SIGN UP \\
-
     const [signUpFormData, setSignUpFormData] = useState({
         firstName: "",
         lastName: "",
@@ -129,8 +112,6 @@ function Login() {
     });
 
     const handleSignUp = async () => {
-
-        // Get the entered data
         const data = {
             firstName: signUpFormData.firstName,
             lastName: signUpFormData.lastName,
@@ -142,18 +123,14 @@ function Login() {
             passwordCheck: signUpFormData.passwordCheck,
         };
 
-        // Make sure the paswords match. FINISH THIS!!!!
-        if (data.password != data.passwordCheck) {
-            console.log("Passwords do not match")
+        // Check if the passwords match
+        if (data.password !== data.passwordCheck) {
+            console.log("Passwords do not match");
             return;
         }
 
-        // Pass the data to the api endpoint
         try {
-
-            // API endpoint URL PUT THIS IN THE ENV!!!!
             const apiURL = "http://159.203.164.160:5000/routes/users/add";
-
             const response = await fetch(apiURL, {
                 method: "POST",
                 credentials: "include",
@@ -164,286 +141,216 @@ function Login() {
             });
 
             const result = await response.json();
-            console.log(result);
-
             if (result.signUpComplete) {
                 console.log(result.message);
             } else {
                 console.log(result.message);
             }
-
         } catch (err) {
             console.log("Error signing up new user: ", err);
         }
-    }
-
-    // END CODE FOR SIGN UP \\
+    };
 
     // GOOGLE SIGNUP
-const Login = () => {
-    const [message, setMessage] = useState('');
-    const navigate = useNavigate();
-  
-const loginWithGoogle = async () => {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        const idToken = await result.user.getIdToken();
-        const response = await fetch("http://159.203.164.160:5000/routes/users/google-login", {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token: idToken }),
-            credentials: 'include',
-        });
-        const responseData = await response.json();
-        if (responseData.loginComplete) {
-            navigate("/Profile");
-        } else {
-            setMessage(responseData.message);
+    const loginWithGoogle = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
+            const response = await fetch("http://159.203.164.160:5000/routes/users/google-login", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: idToken }),
+                credentials: 'include',
+            });
+            const responseData = await response.json();
+            if (responseData.loginComplete) {
+                navigate("/Profile");
+            } else {
+                console.log(responseData.message);
+            }
+        } catch (error) {
+            console.error("Google login error:", error);
+            console.log("Google login failed.");
         }
-    } catch (error) {
-        console.error("Google login error:", error);
-        setMessage("Google login failed.");
-    }
-};
+    };
+
     return (
-
-        <div id='loginContainer' className='container-fluid'>
-
-            <div id='navbar' className='row'>
-                <Navbar/>
+        <div id="loginContainer" className="container-fluid">
+            <div id="navbar" className="row">
+                <Navbar />
             </div>
 
             <div id="loginParent" className="row justify-content-center">
-
                 <div className="col-auto text-center">
 
-                    {signUpForm &&   
-                        <div id='signUpForm'>
-
-                            <div className="row">            
+                    {signUpForm && (
+                        <div id="signUpForm">
+                            <div className="row">
                                 <div id="signUpFormTitle">Sign Up</div>
                                 <div className="col-sm">
-                                    {/* first name */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="firstNameSignUpLabel">First Name</label>
+                                        <label htmlFor="firstNameSignUpLabel">First Name</label>
                                         <input
                                             id="firstNameSignUpInput"
                                             className="form-control"
                                             name="firstName"
                                             type="text"
                                             value={signUpFormData.firstName}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="First Name"
                                         />
                                     </div>
 
-                                    {/* Last name */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="lastNameSignUpLabel">Last Name</label>
+                                        <label htmlFor="lastNameSignUpLabel">Last Name</label>
                                         <input
                                             id="lastNameSignUpInput"
                                             className="form-control"
                                             name="lastName"
                                             type="text"
                                             value={signUpFormData.lastName}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="Last Name"
                                         />
                                     </div>
 
-                                    {/* User name */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="userNameSignUpLabel">User Name</label>
+                                        <label htmlFor="userNameSignUpLabel">User Name</label>
                                         <input
                                             id="userNameSignUpInput"
                                             className="form-control"
                                             name="userName"
                                             type="text"
                                             value={signUpFormData.userName}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="User Name"
                                         />
                                     </div>
 
-                                    {/* Phone number */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="phoneNumberSignUpLabel">Phone Number</label>
+                                        <label htmlFor="phoneNumberSignUpLabel">Phone Number</label>
                                         <input
                                             id="PhoneNumberSignUpInput"
                                             className="form-control"
                                             name="phoneNumber"
                                             type="tel"
                                             value={signUpFormData.phoneNumber}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="Phone Number"
                                         />
                                     </div>
                                 </div>
-                                
-                                <div className="col-sm">
 
-                                    {/* Email */}
+                                <div className="col-sm">
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="emailSignUpLabel">Email</label>
+                                        <label htmlFor="emailSignUpLabel">Email</label>
                                         <input
                                             id="emailSignUpInput"
                                             className="form-control"
                                             name="email"
                                             type="email"
                                             value={signUpFormData.email}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="Email"
                                         />
                                     </div>
-                                    
-                                    {/* Timezone */}
-                                    {/* THIS NEEDS TO BE A DROP DOWN!!!!!!! */}
+
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="timeZoneSignUpLabel">Time Zone</label>
+                                        <label htmlFor="timeZoneSignUpLabel">Time Zone</label>
                                         <select
                                             id="timeZoneSignUpInput"
                                             className="form-control"
                                             name="timeZone"
                                             value={signUpFormData.timeZone}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
-                                            placeholder="Time Zone"
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                         >
-                                            <option>EASTERN TIME</option>
-                                            <option>CENTRAL TIME</option>
-                                            <option>MOUNTAIN TIME</option>
-                                            <option>PACIFIC TIME</option>
-                                            <option>ALASKA TIME</option>
-                                            <option>HAWAII TIME</option>
-                                            <option>SAMOA TIME</option>
-                                            <option>CHAMORRO TIME</option>
+                                            <option value="EASTERN TIME">EASTERN TIME</option>
+                                            <option value="CENTRAL TIME">CENTRAL TIME</option>
+                                            <option value="MOUNTAIN TIME">MOUNTAIN TIME</option>
+                                            <option value="PACIFIC TIME">PACIFIC TIME</option>
+                                            <option value="ALASKA TIME">ALASKA TIME</option>
+                                            <option value="HAWAII TIME">HAWAII TIME</option>
+                                            <option value="SAMOA TIME">SAMOA TIME</option>
+                                            <option value="CHAMORRO TIME">CHAMORRO TIME</option>
                                         </select>
                                     </div>
 
-                                    {/* Password */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="passwordSignUpLabel">Password</label>
+                                        <label htmlFor="passwordSignUpLabel">Password</label>
                                         <input
                                             id="passwordSignUpInput"
                                             className="form-control"
                                             name="password"
                                             type="password"
                                             value={signUpFormData.password}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="Password"
                                         />
                                     </div>
 
-                                    {/* Password check */}
                                     <div className="form-group mt-2 mb-2">
-                                        <label for="passwordCheckSignUpLabel">Re-type Password</label>
+                                        <label htmlFor="passwordCheckSignUpLabel">Re-type Password</label>
                                         <input
                                             id="passwordCheckSignUpInput"
                                             className="form-control"
                                             name="passwordCheck"
                                             type="password"
                                             value={signUpFormData.passwordCheck}
-                                            onChange={(e) => {
-                                                setSignUpFormData({
-                                                    ...signUpFormData,
-                                                    [e.target.name]: e.target.value
-                                                });
-                                            }}
+                                            onChange={(e) => setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value })}
                                             placeholder="Re-type Password"
                                         />
-                                    </div>      
+                                    </div>
                                 </div>
                             </div>
-                          
-                            <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
+
+                            <button className="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
                             <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
-                        </div> 
-                    }
+                        </div>
+                    )}
 
-                    {signInForm && 
+                    {signInForm && (
                         <div id="signInForm">
-
                             <div id="signInFormTitle">Sign In</div>
 
                             <div className="form-group mt-2 mb-2">
-                                <label for="userNameLoginLabel">Username</label>
-                                <input 
+                                <label htmlFor="userNameLoginLabel">Username</label>
+                                <input
                                     id="userNameInputLogin"
-                                    className='form-control'
+                                    className="form-control"
                                     name="userName"
-                                    type="text" 
+                                    type="text"
                                     value={signInFormData.userName}
-                                    onChange={(e) => {
-                                        setSignInFormData({
-                                            ...signInFormData,
-                                            [e.target.name]: e.target.value
-                                        });
-                                    }}
-                                    placeholder="Username"/>
-                            </div>
-                            
-                            <div className="form-group mt-2 mb-2">
-                                <label for="passwordLoginLabel">Password</label>
-                                <input 
-                                    id="passwordInputLogin"
-                                    className='form-control'  
-                                    name="password"
-                                    type="password" 
-                                    value={signInFormData.password}
-                                    onChange={(e) => {
-                                        setSignInFormData({
-                                            ...signInFormData,
-                                            [e.target.name]:e.target.value
-                                        });
-                                    }}
-                                    placeholder="Password"/>
+                                    onChange={(e) => setSignInFormData({ ...signInFormData, [e.target.name]: e.target.value })}
+                                    placeholder="Username"
+                                />
                             </div>
 
-                            <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
+                            <div className="form-group mt-2 mb-2">
+                                <label htmlFor="passwordLoginLabel">Password</label>
+                                <input
+                                    id="passwordInputLogin"
+                                    className="form-control"
+                                    name="password"
+                                    type="password"
+                                    value={signInFormData.password}
+                                    onChange={(e) => setSignInFormData({ ...signInFormData, [e.target.name]: e.target.value })}
+                                    placeholder="Password"
+                                />
+                            </div>
+
+                            <button className="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
                             <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
 
-                            <button className="googleSignInButton mt-3" onClick={handleGoogleLogin}>
+                            <button className="googleSignInButton mt-3" onClick={loginWithGoogle}>
                                 <img src="/images/google-icon.png" alt="Google icon" className="googleIcon" />
                                 Sign in with Google
                             </button>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         </div>
     );
-};
+}
+
+export default Login;
