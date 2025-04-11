@@ -13,3 +13,5 @@ admin.initializeApp({
 });
 
 console.log('Firebase Admin SDK initialized!');
+
+module.exports = admin;
