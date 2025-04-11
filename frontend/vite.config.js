@@ -6,6 +6,3 @@ export default defineConfig({
   plugins: [react()],
 })
 
-build: {
-    target: 'esnext',  // Ensure modern JS is targeted
-  }
