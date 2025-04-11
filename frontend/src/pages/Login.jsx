@@ -2,6 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import '../styles/Login.css'
+import axios from "axios";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCMEQtFODLC9rZwdkT_mb3F1Gusu_1IU-g",
+  authDomain: "meditrack-dualauth.firebaseapp.com",
+  projectId: "meditrack-dualauth",
+  storageBucket: "meditrack-dualauth.firebasestorage.app",
+  messagingSenderId: "947596501774",
+  appId: "1:947596501774:web:f381a371c54a5830aa2d5f",
+  measurementId: "G-K3J4LGNFMS"
+};
+
+// Initialize firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 function Login() {
 
@@ -161,6 +179,27 @@ function Login() {
     }
 
     // END CODE FOR SIGN UP \\
+
+    // GOOGLE SIGNUP
+     const handleGoogleLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const idToken = await result.user.getIdToken();
+
+            const response = await axios.post("/login", {
+                token: idToken
+            });
+
+            if (response.data.loginComplete) {
+                setMessage("Google login successful!");
+            } else {
+                setMessage(response.data.message);
+            }
+        } catch (error) {
+            console.error("Google login error:", error);
+            setMessage("Google login failed.");
+        }
+    };
 
     return (
 
@@ -392,6 +431,11 @@ function Login() {
 
                             <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
                             <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
+
+                            <button className="googleSignInButton mt-3" onClick={handleGoogleLogin}>
+                                <img src="/google-icon.svg" alt="Google icon" className="googleIcon" />
+                                Sign in with Google
+                            </button>
                         </div>
                     }
                 </div>
