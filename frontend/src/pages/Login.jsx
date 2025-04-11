@@ -5,7 +5,7 @@ import '../styles/Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
-const firebaseConfig = {
+const firebaseConfig = { 
   apiKey: "AIzaSyCMEQtFODLC9rZwdkT_mb3F1Gusu_1IU-g",
   authDomain: "meditrack-dualauth.firebaseapp.com",
   projectId: "meditrack-dualauth",
