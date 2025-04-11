@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import '../styles/Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import axios from 'axios';
 
 const firebaseConfig = { 
   apiKey: "AIzaSyCMEQtFODLC9rZwdkT_mb3F1Gusu_1IU-g",
