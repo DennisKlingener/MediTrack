@@ -1,6 +1,3 @@
-// src/firebase.js
-import {initializeApp} from 'firebase/app';  // Firebase app initialization
-import {getAuth, GoogleAuthProvider} from 'firebase/auth';  // Firebase Authentication SDK
 
 // Replace with your Firebase project's configuration
 const firebaseConfig = {
@@ -13,13 +10,4 @@ const firebaseConfig = {
   measurementId: "G-K3J4LGNFMS"
 };
 
-// Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-const provider = new GoogleAuthProvider();
-const auth = getAuth(firebaseApp);
-// Export the auth service for use in components
-/*module.exports = {
-  auth: firebaseApp.auth(),  // Firebase Authentication service
-  firebaseApp,  // The initialized Firebase app
-};*/
-export{auth, provider};
+export default firebaseConfig;
