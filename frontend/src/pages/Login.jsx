@@ -1,4 +1,10 @@
-function Login() {
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInWithPopup } from 'firebase/auth'; // If using Firebase for Google Sign-In
+import { auth, provider } from './firebaseConfig'; // Assuming you have Firebase config
+import Navbar from './Navbar'; // Assuming you have a Navbar component
+
+const Login = () => {
     const [signUpForm, setSignUpForm] = useState(false);
     const [signInForm, setSignInForm] = useState(false);
     const [signInFormData, setSignInFormData] = useState({
@@ -15,6 +21,9 @@ function Login() {
         password: "",
         passwordCheck: "",
     });
+
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const data = location.state?.data;
@@ -98,10 +107,6 @@ function Login() {
         }
     };
 
-const LoginComponent = () => {
-    const [message, setMessage] = useState('');
-    const navigate = useNavigate();
-  
     const loginWithGoogle = async () => {
         try {
             const result = await signInWithPopup(auth, provider);
@@ -152,6 +157,6 @@ const LoginComponent = () => {
             </div>
         </div>
     );
-}
+};
+
 export default Login;
-export { LoginComponent };
