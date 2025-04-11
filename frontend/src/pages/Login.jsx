@@ -448,4 +448,4 @@ const loginWithGoogle = async () => {
     );
 };
 
-export default Login;
+export default;
