@@ -154,4 +154,4 @@ const LoginComponent = () => {
     );
 }
 
-export default Login;
+export { LoginComponent };
