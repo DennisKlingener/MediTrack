@@ -8,4 +8,4 @@ export default defineConfig({
 
 build: {
     target: 'esnext',  // Ensure modern JS is targeted
-  },
+  }
