@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import '../styles/Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import axios from 'axios'; 
+import axios from 'axios';
 
 const firebaseConfig = { 
   apiKey: "AIzaSyCMEQtFODLC9rZwdkT_mb3F1Gusu_1IU-g",
@@ -64,7 +64,7 @@ function Login() {
         });
     };
 
-    // CODE FOR LOGIN \\
+    // CODE FOR LOGIN
     const [signInFormData, setSignInFormData] = useState({
         userName: "",
         password: "",
@@ -93,14 +93,14 @@ function Login() {
             if (result.loginComplete) {
                 navigate("/Profile");
             } else {
-                console.log("Login failed");
+                console.error("Login failed: ", result.message);
             }
         } catch (error) {
-            console.log(error);
+            console.error("Error during login: ", error);
         }
     };
 
-    // CODE FOR SIGN UP \\
+    // CODE FOR SIGN UP
     const [signUpFormData, setSignUpFormData] = useState({
         firstName: "",
         lastName: "",
@@ -126,7 +126,7 @@ function Login() {
 
         // Check if the passwords match
         if (data.password !== data.passwordCheck) {
-            console.log("Passwords do not match");
+            console.error("Passwords do not match");
             return;
         }
 
@@ -145,10 +145,10 @@ function Login() {
             if (result.signUpComplete) {
                 console.log(result.message);
             } else {
-                console.log(result.message);
+                console.error(result.message);
             }
         } catch (err) {
-            console.log("Error signing up new user: ", err);
+            console.error("Error signing up new user: ", err);
         }
     };
 
@@ -167,11 +167,10 @@ function Login() {
             if (responseData.loginComplete) {
                 navigate("/Profile");
             } else {
-                console.log(responseData.message);
+                console.error(responseData.message);
             }
         } catch (error) {
             console.error("Google login error:", error);
-            console.log("Google login failed.");
         }
     };
 
@@ -183,7 +182,6 @@ function Login() {
 
             <div id="loginParent" className="row justify-content-center">
                 <div className="col-auto text-center">
-
                     {signUpForm && (
                         <div id="signUpForm">
                             <div className="row">
@@ -301,11 +299,11 @@ function Login() {
                                             placeholder="Re-type Password"
                                         />
                                     </div>
+
+                                    <button className="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
+                                    <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
                                 </div>
                             </div>
-
-                            <button className="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
-                            <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
                         </div>
                     )}
 
@@ -314,22 +312,22 @@ function Login() {
                             <div id="signInFormTitle">Sign In</div>
 
                             <div className="form-group mt-2 mb-2">
-                                <label htmlFor="userNameLoginLabel">Username</label>
+                                <label htmlFor="userNameSignInLabel">User Name</label>
                                 <input
-                                    id="userNameInputLogin"
+                                    id="userNameSignInInput"
                                     className="form-control"
                                     name="userName"
                                     type="text"
                                     value={signInFormData.userName}
                                     onChange={(e) => setSignInFormData({ ...signInFormData, [e.target.name]: e.target.value })}
-                                    placeholder="Username"
+                                    placeholder="User Name"
                                 />
                             </div>
 
                             <div className="form-group mt-2 mb-2">
-                                <label htmlFor="passwordLoginLabel">Password</label>
+                                <label htmlFor="passwordSignInLabel">Password</label>
                                 <input
-                                    id="passwordInputLogin"
+                                    id="passwordSignInInput"
                                     className="form-control"
                                     name="password"
                                     type="password"
