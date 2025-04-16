@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { auth, provider, signInWithPopup } from './firebase';
 import Navbar from '../components/Navbar';
 import '../styles/Login.css'
 
@@ -93,6 +94,27 @@ function Login() {
 
         } catch (error) {
             console.log(error);
+        }
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth,  provider);
+            const token = await result.user.getIdToken();
+
+            apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
+
+            const res = await fetch(apiURL, {
+                method: "POST",
+                credentials: "include",
+                headers: {"content-type": "application/json"},
+                body: JSON.stringify({token}),
+            });
+
+            const data = await res.json();
+            console.log("google login results:", data);
+        } catch (err) {
+            console.log("Error handling google signin", err);
         }
     };
 

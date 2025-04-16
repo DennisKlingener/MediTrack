@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const jwt = require('jsonwebtoken');
+const admin = require("../FireBase/firebaseAdmin")
 
 // Express function that parses incoming JSON
 router.use(express.json());
@@ -114,7 +115,7 @@ router.get("/search", (req, res) => {
     });
 });
 
-// Login
+// Login with MediTrack
 router.post("/login", async (req, res) => {
     
     // Get the json from the login request.
@@ -174,6 +175,30 @@ router.post("/login", async (req, res) => {
         });
     }
 });
+
+// Login with Google (FireBase)
+router.post("/googleLogin", async (req, res) => {
+    const {token} = req.body;
+
+    try {
+        const decodedToken =  await admin.auth().verfiyIdToken(token);
+        const userId = decodedToken.uid;
+        const userEmail =  decodedToken.email;
+
+        // Need to generate my own jwt token here.
+
+        console.log("user id:", userId);
+        console.log("user email:", userEmail);
+
+        return res.json({success: true});
+    } catch(err)  {
+        console.log("Token verification faliure:", err);
+        return res.status(401).json({error: "Unauthorized"});
+    }
+});
+
+
+
 
 // Add user
 router.post("/add", async (req, res) => {

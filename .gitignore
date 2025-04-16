@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .env
+
+# Firebase
+medi-track-e545d-firebase-adminsdk-fbsvc-9095070f4b.json
+
