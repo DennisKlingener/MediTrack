@@ -181,7 +181,7 @@ router.post("/googleLogin", async (req, res) => {
     const {token} = req.body;
 
     try {
-        const decodedToken =  await admin.auth().verfiyIdToken(token);
+        const decodedToken =  await admin.auth().verifyIdToken(token);
         const userId = decodedToken.uid;
         const userEmail =  decodedToken.email;
 
