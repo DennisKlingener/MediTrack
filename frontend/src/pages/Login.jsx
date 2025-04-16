@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { auth, provider, signInWithPopup } from './firebase';
+import { auth, provider, signInWithPopup } from '../firebase/Firebase';
 import Navbar from '../components/Navbar';
 import '../styles/Login.css'
 
