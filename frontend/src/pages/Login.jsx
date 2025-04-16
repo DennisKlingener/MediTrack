@@ -412,8 +412,12 @@ function Login() {
                                     placeholder="Password"/>
                             </div>
 
-                            <button class="btn btn-primary mt-2 mb-2" onClick={handleLogin}>Submit</button>
-                            <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
+                            <div class="d-flex flex-column gap-2">
+                                <button class="btn btn-primary mt-2 mb-1" onClick={handleLogin}>Submit</button>
+                                <button class="btn btn-primary mb-1" onClick={handleGoogleLogin}>Login with Google</button>
+                                <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>
+                            </div>
+
                         </div>
                     }
                 </div>
