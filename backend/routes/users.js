@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const databasePool = require("../databaseConnection");
 const jwt = require('jsonwebtoken');
-const admin = require("../FireBase/firebaseAdmin")
+const admin = require("../FireBase/firebaseAdmin");
 
 // Express function that parses incoming JSON
 router.use(express.json());
