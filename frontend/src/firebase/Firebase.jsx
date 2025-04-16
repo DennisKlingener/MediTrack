@@ -23,7 +23,7 @@ console.log("losing my mind:", process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
 console.log("losing my mind:", process.env.REACT_APP_FIREBASE_SENDER_ID);
 console.log("losing my mind:", process.env.REACT_APP_FIREBASE_APP_ID);
 console.log("losing my mind:", process.env.REACT_APP_FIREBASE_MEASUREMENT_ID);
-console.log("losing my mind:", process.env.DB_HOST);
+console.log("losing my mind:", process.env.REACT_APP_TEST);
 
 
 
