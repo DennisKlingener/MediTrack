@@ -102,7 +102,7 @@ function Login() {
             const result = await signInWithPopup(auth,  provider);
             const token = await result.user.getIdToken();
 
-            apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
+            const apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
 
             const res = await fetch(apiURL, {
                 method: "POST",
