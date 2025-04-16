@@ -16,7 +16,14 @@ const firebaseConfig = {
 };
 
 
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_API_KEY);
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_AUTH_DOMAIN);
 console.log("losing my mind:", process.env.REACT_APP_FIREBASE_PROJECT_ID);
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_STORAGE_BUCKET);
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_SENDER_ID);
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_APP_ID);
+console.log("losing my mind:", process.env.REACT_APP_FIREBASE_MEASUREMENT_ID);
+
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
