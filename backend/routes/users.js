@@ -197,9 +197,6 @@ router.post("/googleLogin", async (req, res) => {
     }
 });
 
-
-
-
 // Add user
 router.post("/add", async (req, res) => {
 

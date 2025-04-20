@@ -52,10 +52,7 @@
 - Make usernames in the database a unique entry
 - put asyncdatabasequery in utils so we can use it in medications and cronJobs without rewriting.
 - make login and signup separate files if we have time!
-- Need to implement a way to check in the add medication endpoint if the med is taken at a specific time each day or at an interval.
-    - We can use default values in the req.body extraction and then implement conditions.
 - need a secret key (gitlab secret) to secure and verify jwt tokens. Stretch goal, not needed.
-- Need to ensure the front end login has a controlled time zone drop down menu to match whats expected in the endpoints etc.
 - Need to place our api endpoints in our .env or a gitlab secret. These need to be secure.
 - Implement error messages in the UI for login and signup errors.
 - There will be errors when taking more pills than you have left.
@@ -63,6 +60,8 @@
 - Make it so when you add a new med it pops up without refreshing the screen.
 - Need a permenant solution to checking if we are in daylight savings or not.
 - need less than 0 checks for time to utc
+- Make email a unique entry in database
+- Make the website styles responsiveness better when resizing and for different screen sizes.
 
 
 ## Command to insert new user:

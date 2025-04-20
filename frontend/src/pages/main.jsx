@@ -10,6 +10,7 @@ import { ViewProvider } from '../../viewContext.jsx';
 import MediTrackIndex from './MediTrackIndex.jsx'
 import Login from './Login.jsx';
 import ProfilePage from './ProfilePage.jsx';
+import CompleteProfile from './CompleteProfile.jsx';
 
 
 
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
 
           <Route path='/' element={<MediTrackIndex />} />
           <Route path='/Login' element={<Login />} />
+          <Route path='/CompleteProfile' element={<CompleteProfile/>} />
           <Route path='/Profile' element={<ProfilePage />} />
 
         </Routes>

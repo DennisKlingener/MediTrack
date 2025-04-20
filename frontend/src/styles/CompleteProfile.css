@@ -1,0 +1,10 @@
+#completeProfileParent {
+    height: 100vh; 
+    overflow-y: hidden;
+
+}
+
+#formParent {
+    align-content: center;
+    height: 90vh;
+}
