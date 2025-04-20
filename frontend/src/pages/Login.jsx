@@ -15,6 +15,9 @@ function Login() {
     // For conditional rendering of the form divs.
     const [signUpForm, setSignUpForm] = useState(false);
     const [signInForm, setSignInForm] = useState(false);
+
+    // For status message
+    const [statusMessage, setStatusMessage] = useState("");
     
     // Runs immediatly after the page is loaded.
     useEffect(() => {
@@ -86,14 +89,15 @@ function Login() {
 
             // Check if the login was successful.
             if (result.loginComplete) {
+                setStatusMessage("");
                 navigate("/Profile");
             } else {
-                // put an error message here.
-                console.log("WIP");
+                setStatusMessage("Incorrect username/password!");
             }   
 
         } catch (error) {
             console.log(error);
+            setStatusMessage("Error signing in: ", err);
         }
     };
 
@@ -115,14 +119,15 @@ function Login() {
             const data = await res.json();
             
             if (data.loginComplete) {
+                setStatusMessage("");
                 navigate("/Profile");
             } else {
-                // put an error message here.
-                console.log("WIP");
+                setStatusMessage("User not found!");
             }   
 
         } catch (err) {
             console.log("Error handling google signin", err);
+            setStatusMessage("Error handling google signin, see console.");
         }
     };
 
@@ -180,13 +185,14 @@ function Login() {
             console.log(result);
 
             if (result.signUpComplete) {
-                console.log(result.message);
+                setStatusMessage("User added!");
             } else {
-                console.log(result.message);
+                setStatusMessage("Please check all forms are correct and try again!");
             }
 
         } catch (err) {
             console.log("Error signing up new user: ", err);
+            setStatusMessage("Error signing up new use, see console.");
         }
     }
 
@@ -206,16 +212,17 @@ function Login() {
             });
 
             const data = await res.json();
-            console.log("google verify results:", data);
-
+    
             if (data.verifyComplete) {
+                setStatusMessage("");
                 navigate('/CompleteProfile');
             } else  {
-                console.log("Error sighing in with google");
+                setStatusMessage("Google verification failure, please try again.");
             }
 
         } catch (err) {
             console.log("Error handling google signin", err);
+            setStatusMessage("Error handling google signin, see console.");
         }
     }
 
@@ -406,6 +413,7 @@ function Login() {
                             </div>
                           
                             <div class="d-flex flex-column gap-2">
+                                <div id="statusMessage">{statusMessage}</div>
                                 <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
                                 <button class="btn btn-primary mb-1" onClick={handleGoogleSignUp}>Sign Up with Google</button>
                                 <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
@@ -453,6 +461,7 @@ function Login() {
                             </div>
 
                             <div class="d-flex flex-column gap-2">
+                                <div id="statusMessage">{statusMessage}</div>
                                 <button class="btn btn-primary mt-2 mb-1" onClick={handleLogin}>Submit</button>
                                 <button class="btn btn-primary mb-1" onClick={handleGoogleLogin}>Login with Google</button>
                                 <div>Not a member? <a href="#" onClick={toggleForms}>Sign up.</a></div>

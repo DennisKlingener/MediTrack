@@ -29,6 +29,9 @@ function CompleteProfile() {
         passwordCheck: "",
     });
 
+    // For status message
+    const [statusMessage, setStatusMessage] = useState("");
+
     const handleSignUp = async () => {
 
         // Get the entered data
@@ -59,18 +62,18 @@ function CompleteProfile() {
             });
 
             const result = await response.json();
-            console.log(result);
 
             if (result.signUpComplete) {
-                console.log(result.message);
+                setStatusMessage("");
                 const data = {formToLoad: "SIGNIN"};
                 navigate("/Login", {state: {data:data}});
             } else {
-                console.log(result.message);
+                setStatusMessage("Please check all forms are correct and try again!");
             }
 
         } catch (err) {
             console.log("Error signing up new user: ", err);
+            setStatusMessage("Error signing up new user, see console.");
         }
     }
 
@@ -219,7 +222,11 @@ function CompleteProfile() {
                             </div>
                         </div>
 
-                        <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Finish</button>
+                        <div class="d-flex flex-column gap-2">
+                            <div id="statusMessage">{statusMessage}</div>
+                            <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Finish</button>
+                        </div>
+
                     </div>
                 </div>
             </div>

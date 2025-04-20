@@ -10,7 +10,6 @@
     height: 90vh; 
 }
 
-
 #signUpFormTitle {
     font-size: 35px;
     color: royalblue;
@@ -53,4 +52,8 @@
     
     
 
+}
+
+#statusMessage {
+    color: black;
 }
