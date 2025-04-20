@@ -178,6 +178,7 @@ router.post("/login", async (req, res) => {
 
 // Login with Google (FireBase)
 router.post("/googleLogin", async (req, res) => {
+
     const {token} = req.body;
 
     try {
@@ -185,12 +186,43 @@ router.post("/googleLogin", async (req, res) => {
         const userId = decodedToken.uid;
         const userEmail =  decodedToken.email;
 
-        // Need to generate my own jwt token here.
+        // Search for a user with the same email from the google token
+        const request = "SELECT * FROM users WHERE EMAIL = ?";
+        const results = await asyncDatabaseQuery(request, [userEmail]);
 
-        console.log("user id:", userId);
-        console.log("user email:", userEmail);
+        if (results[0] && results[0].EMAIL == userEmail) {
 
-        return res.json({success: true});
+            const token = jwt.sign(
+                {userId: results[0].id,
+                firstName: results[0].FIRST_NAME,
+                lastName: results[0].LAST_NAME,
+                userName: results[0].USER_NAME,
+                phoneNumber: results[0].PHONE_NUMBER,
+                email: results[0].EMAIL,
+                timeZone: results[0].TIMEZONE }, 
+                "CHANGE_THIS_KEY", 
+                {expiresIn: "2h"}
+            );
+
+            // Store the token in a http cookie.
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "strict"
+            });
+
+            return res.status(200).json({
+                "loginComplete": true,
+                "message": "LOGIN_COMPLETE"
+            });
+
+        } else {
+            return res.status(200).json({
+                "loginComplete": false,
+                "message": "USER_NOT_FOUND"
+            });
+        }
+
     } catch(err)  {
         console.log("Token verification faliure:", err);
         return res.status(401).json({error: "Unauthorized"});
