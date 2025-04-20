@@ -97,8 +97,7 @@ function Login() {
         }
     };
 
-    // THis should verify a user exists with email provided by firebase
-    // generate a jwt token, and move to the profile page
+    // This verifys a user exists with email provided by firebase
     const handleGoogleLogin = async () => {
         try {
             const result = await signInWithPopup(auth,  provider);
@@ -114,7 +113,14 @@ function Login() {
             });
 
             const data = await res.json();
-            console.log("google login results:", data);
+            
+            if (data.loginComplete) {
+                navigate("/Profile");
+            } else {
+                // put an error message here.
+                console.log("WIP");
+            }   
+            
         } catch (err) {
             console.log("Error handling google signin", err);
         }
@@ -184,8 +190,7 @@ function Login() {
         }
     }
 
-
-    // THis should move to the complete profile page on success.
+    // This moves to the complete profile page on success.
     const handleGoogleSignUp = async () => {
         try {
             const result = await signInWithPopup(auth,  provider);
@@ -213,8 +218,6 @@ function Login() {
             console.log("Error handling google signin", err);
         }
     }
-
-
 
     // END CODE FOR SIGN UP \\
 
