@@ -103,7 +103,7 @@ function Login() {
             const result = await signInWithPopup(auth,  provider);
             const token = await result.user.getIdToken();
 
-            const apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
+            const apiURL = "http://159.203.164.160:5000/routes/users/googleLogin";
 
             const res = await fetch(apiURL, {
                 method: "POST",
@@ -120,7 +120,7 @@ function Login() {
                 // put an error message here.
                 console.log("WIP");
             }   
-            
+
         } catch (err) {
             console.log("Error handling google signin", err);
         }
@@ -196,7 +196,7 @@ function Login() {
             const result = await signInWithPopup(auth,  provider);
             const token = await result.user.getIdToken();
 
-            const apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
+            const apiURL = "http://159.203.164.160:5000/routes/users/googleVerify";
 
             const res = await fetch(apiURL, {
                 method: "POST",
@@ -206,9 +206,9 @@ function Login() {
             });
 
             const data = await res.json();
-            console.log("google login results:", data);
+            console.log("google verify results:", data);
 
-            if (data.success) {
+            if (data.verifyComplete) {
                 navigate('/CompleteProfile');
             } else  {
                 console.log("Error sighing in with google");
@@ -405,9 +405,6 @@ function Login() {
                                 </div>
                             </div>
                           
-
-
-
                             <div class="d-flex flex-column gap-2">
                                 <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
                                 <button class="btn btn-primary mb-1" onClick={handleGoogleSignUp}>Sign Up with Google</button>

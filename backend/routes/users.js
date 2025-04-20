@@ -176,6 +176,32 @@ router.post("/login", async (req, res) => {
     }
 });
 
+router.post("/googleVerify", async (req, res) => {
+
+    const {token} = req.body;
+
+    try {
+        const decodedToken =  await admin.auth().verifyIdToken(token);
+
+        return res.status(200).json({
+            "verifyComplete": true,
+            "message": "VERIFY_COMPLETE"
+        });
+        
+    } catch(err) {
+        console.log("Token verification faliure:", err);
+        return res.status(401).json({error: "Unauthorized"});
+    }
+
+
+});
+
+
+
+
+
+
+
 // Login with Google (FireBase)
 router.post("/googleLogin", async (req, res) => {
 
