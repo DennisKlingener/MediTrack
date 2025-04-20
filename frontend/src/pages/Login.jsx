@@ -402,8 +402,14 @@ function Login() {
                                 </div>
                             </div>
                           
-                            <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
-                            <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
+
+
+
+                            <div class="d-flex flex-column gap-2">
+                                <button class="btn btn-primary mt-2 mb-2" onClick={handleSignUp}>Sign Up</button>
+                                <button class="btn btn-primary mb-1" onClick={handleGoogleSignUp}>Sign Up with Google</button>
+                                <div>Already a member? <a href="#" onClick={toggleForms}>Login.</a></div>
+                            </div>
                         </div> 
                     }
 
