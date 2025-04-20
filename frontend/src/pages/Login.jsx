@@ -37,6 +37,7 @@ function Login() {
     const toggleForms = () => {
         setSignUpForm(!signUpForm);
         setSignInForm(!signInForm);
+        setStatusMessage("");
         setSignInFormData({
             userName: "",
             password: "",
