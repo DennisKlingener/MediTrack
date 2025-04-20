@@ -18,8 +18,6 @@ function MediTrackIndex() {
 
         const data = {formToLoad: form};
 
-        console.log("Form is: " + form);
-
         navigate('/Login', {state: { data:data } });
     };
         

@@ -97,6 +97,8 @@ function Login() {
         }
     };
 
+    // THis should verify a user exists with email provided by firebase
+    // generate a jwt token, and move to the profile page
     const handleGoogleLogin = async () => {
         try {
             const result = await signInWithPopup(auth,  provider);
@@ -181,6 +183,38 @@ function Login() {
             console.log("Error signing up new user: ", err);
         }
     }
+
+
+    // THis should move to the complete profile page on success.
+    const handleGoogleSignUp = async () => {
+        try {
+            const result = await signInWithPopup(auth,  provider);
+            const token = await result.user.getIdToken();
+
+            const apiURL = "http://159.203.164.160:5000/routes/users/googlelogin";
+
+            const res = await fetch(apiURL, {
+                method: "POST",
+                credentials: "include",
+                headers: {"content-type": "application/json"},
+                body: JSON.stringify({token}),
+            });
+
+            const data = await res.json();
+            console.log("google login results:", data);
+
+            if (data.success) {
+                navigate('/CompleteProfile');
+            } else  {
+                console.log("Error sighing in with google");
+            }
+
+        } catch (err) {
+            console.log("Error handling google signin", err);
+        }
+    }
+
+
 
     // END CODE FOR SIGN UP \\
 
